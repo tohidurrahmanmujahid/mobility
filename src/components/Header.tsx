@@ -51,7 +51,7 @@ const Header = () => {
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <nav className="md:hidden bg-primary border-t border-primary-foreground/10">
-          <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
+          <div className="container mx-auto px-4 py-4 flex flex-col gap-2 text-white">
             {navItems.map((item) => (
               <Button
                 key={item.path}

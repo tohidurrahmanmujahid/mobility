@@ -17,7 +17,7 @@ const Footer = () => {
 
           {/* Connect With Us */}
           <div>
-            <h3 className="font-bold text-foreground mb-4">CONNECT WITH US</h3>
+            <h3 className="font-bold text-foreground mb-4">FÖLJ OSS</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>Instagram</li>
               <li>TikTok</li>

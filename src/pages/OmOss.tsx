@@ -18,7 +18,7 @@ const OmOss = () => {
       >
         <div className="absolute inset-0 bg-primary/40"></div>
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground">
+          <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-4">
             ABOUT US
           </h1>
         </div>

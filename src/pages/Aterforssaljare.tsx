@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Check } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import heroOcean from "@/assets/hero-ocean.jpg";
+import heroOcean from "@/assets/pictureocean.jpg";
+
 import carGarage from "@/assets/car-garage.jpg";
 import { toast } from "sonner";
 
@@ -17,10 +18,48 @@ const Aterforssaljare = () => {
     phone: "",
     email: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Din ansökan har skickats!");
+
+    // Validate form
+    if (!formData.companyName || !formData.orgNumber || !formData.phone || !formData.email) {
+      toast.error("Vänligen fyll i alla fält");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
+      const response = await fetch(`${apiBaseUrl}/api/v1/partnership/request`, {
+        method: 'POST',
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      toast.success("Din ansökan har skickats!");
+      console.log('Partnership application successful:', result);
+
+      // Reset form
+      setFormData({
+        companyName: "",
+        orgNumber: "",
+        phone: "",
+        email: "",
+      });
+    } catch (error) {
+      console.error('Error submitting partnership application:', error);
+      toast.error("Ett fel uppstod. Vänligen försök igen.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -29,7 +68,7 @@ const Aterforssaljare = () => {
       
       {/* Hero */}
       <section 
-        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center pt-20"
+        className="relative min-h-[400px] flex items-center justify-center bg-cover bg-center pt-20"
         style={{ backgroundImage: `url(${heroOcean})` }}
       >
         <div className="absolute inset-0 bg-primary/40"></div>
@@ -129,6 +168,7 @@ const Aterforssaljare = () => {
                         value={formData.companyName}
                         onChange={(e) => setFormData({...formData, companyName: e.target.value})}
                         className="rounded-full"
+                        required
                       />
                     </div>
 
@@ -139,6 +179,7 @@ const Aterforssaljare = () => {
                         value={formData.orgNumber}
                         onChange={(e) => setFormData({...formData, orgNumber: e.target.value})}
                         className="rounded-full"
+                        required
                       />
                     </div>
 
@@ -150,6 +191,7 @@ const Aterforssaljare = () => {
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
                         className="rounded-full"
+                        required
                       />
                     </div>
 
@@ -161,11 +203,18 @@ const Aterforssaljare = () => {
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         className="rounded-full"
+                        required
                       />
                     </div>
 
-                    <Button type="submit" size="lg" variant="secondary" className="w-full rounded-full">
-                      SKICKA ANSÖKAN
+                    <Button
+                      type="submit"
+                      size="lg"
+                      variant="outline"
+                      className="w-full rounded-full bg-primary text-white"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'SKICKAR...' : 'SKICKA ANSÖKAN'}
                     </Button>
                   </div>
                 </Card>

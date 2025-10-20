@@ -12,12 +12,12 @@ const Kundservice = () => {
       
       {/* Hero */}
       <section 
-        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center pt-20"
+        className="relative min-h-[400px] flex items-center justify-center bg-cover bg-center pt-20"
         style={{ backgroundImage: `url(${heroOcean})` }}
       >
         <div className="absolute inset-0 bg-primary/40"></div>
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-6xl md:text-8xl font-bold text-primary-foreground mb-8">
+          <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-4">
             FRÅGOR?
           </h1>
           <Button size="lg" variant="secondary" className="rounded-full text-2xl py-8 px-12">

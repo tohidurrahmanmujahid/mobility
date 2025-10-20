@@ -13,10 +13,11 @@ import pictureCars from "@/assets/picturecars.jpg";
 import { toast } from "sonner";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import VerkstadSection from "@/components/VerkstadSection";
-import { Link } from "react-router-dom";
+import VehicleDamageForm from "@/components/VehicleDamageForm";
 
 const Skadeanmalan = () => {
   const [activeForm, setActiveForm] = useState<"damaged" | "workshop">("damaged");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     registrationNumber: "",
     mileage: "",
@@ -69,14 +70,67 @@ const Skadeanmalan = () => {
 
 
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Din skadeanmälan har skickats!");
+    setIsSubmitting(true);
+
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
+      const response = await fetch(`${apiBaseUrl}/api/warranties/submit-claim`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          registrationNumber: formData.registrationNumber,
+          mileage: formData.mileage,
+          firstname: formData.firstname,
+          lastname: formData.lastname,
+          phone: formData.phone,
+          email: formData.email,
+          damageDescription: formData.damageDescription,
+          submittedAt: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      toast.success("Din skadeanmälan har skickats!");
+      console.log('Submission successful:', result);
+
+      // Reset form
+      setFormData({
+        registrationNumber: "",
+        mileage: "",
+        firstname: "",
+        lastname: "",
+        phone: "",
+        email: "",
+        damageDescription: "",
+      });
+
+    } catch (error) {
+      console.error('Error submitting claim:', error);
+      toast.error("Ett fel uppstod vid skickning av skadeanmälan. Vänligen försök igen.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleWorkshopSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Verkstadsanmälan har skickats!");
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
@@ -106,30 +160,29 @@ const Skadeanmalan = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-8">
-              {/* For Job Seekers */}
+              {/* For Workshop */}
               <div className="space-y-3">
                 <Button
                   size="lg"
                   variant="outline"
-
+                  onClick={() => scrollToSection('verkstad-section')}
                   className="bg-white text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
                 >
-                  <Link to="/produkter">För verkstad</Link>
-
+                  För verkstad
                 </Button>
               </div>
 
-              {/* For Businesses */}
+              {/* For Car Owner */}
               <div className="space-y-3">
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Button
                     size="lg"
                     variant="outline"
+                    onClick={() => scrollToSection('damage-process-section')}
                     className="bg-white text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
                   >
-                    <Link to="/Skadeanmalan">För bilägare</Link>
+                    För bilägare
                   </Button>
-
                 </div>
               </div>
             </div>
@@ -184,7 +237,7 @@ const Skadeanmalan = () => {
         </div>
       </section>
 
-      <section className="py-16 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${pictureCars})` }}>
+      <section id="damage-process-section" className="py-16 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${pictureCars})` }}>
         <div className="relative overflow-hidden from-teal-700 to-teal-900 text-white">
 
 
@@ -299,8 +352,14 @@ const Skadeanmalan = () => {
                   />
                 </div>
 
-                <Button type="submit" size="lg" variant="secondary" className="w-full rounded-full">
-                  SKICKA IN
+                <Button
+                  type="submit"
+                  size="lg"
+                  variant="secondary"
+                  className="bg-primary text-white w-half rounded-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'SKICKAR...' : 'SKICKA IN'}
                 </Button>
               </div>
             </Card>
@@ -313,7 +372,9 @@ const Skadeanmalan = () => {
 
 
       {/* Workshop Section */}
-      <VerkstadSection />
+      <div id="verkstad-section">
+        <VerkstadSection />
+      </div>
       {/* Workshop Form */}
 
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
@@ -321,206 +382,8 @@ const Skadeanmalan = () => {
 
 
         {/* Damage Report Form Section */}
-        <div className="max-w-5xl mx-auto px-6 py-16">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-teal-800 mb-8">Skadeanmälan</h2>
 
-            <div className="space-y-8">
-              {/* Vehicle/Damage Information */}
-              <div>
-                <h3 className="text-xl font-semibold text-teal-700 mb-4 pb-2 border-b-2 border-teal-600">
-                  Fordons-/skadeuppgifter
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="vehicleOwner">Bilägare</Label>
-                    <Input
-                      id="vehicleOwner"
-                      value={workshopFormData.vehicleOwner}
-                      onChange={(e) => setWorkshopFormData({ ...workshopFormData, vehicleOwner: e.target.value })}
-                      placeholder="Namn på bilägare"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="registrationNumber">Registreringsnummer</Label>
-                    <Input
-                      id="registrationNumber"
-                      value={formData.registrationNumber}
-                      onChange={(e) => setWorkshopFormData({ ...workshopFormData, registrationNumber: e.target.value })}
-                      placeholder="ABC123"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="brand">Märke</Label>
-                    <Input
-                      id="brand"
-                      value={workshopFormData.brand}
-                      onChange={(e) => setWorkshopFormData({ ...workshopFormData, brand: e.target.value })}
-                      placeholder="Bilmärke"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="model">Modell</Label>
-                    <Input
-                      id="model"
-                      value={workshopFormData.model}
-                      onChange={(e) => setWorkshopFormData({ ...workshopFormData, model: e.target.value })}
-                      placeholder="Modell"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Workshop Information */}
-              <div>
-                <h3 className="text-xl font-semibold text-teal-700 mb-4 pb-2 border-b-2 border-teal-600">
-                  Verkstadens uppgifter
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="workshopName">Verkstadsnamn</Label>
-                    <Input
-                      id="workshopName"
-                      value={workshopFormData.workshopName}
-                      onChange={(e) => setWorkshopFormData({ ...workshopFormData, workshopName: e.target.value })}
-                      placeholder="Namn på verkstad"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="organizationNumber">Organisationsnummer</Label>
-                    <Input
-                      id="organizationNumber"
-                      value={workshopFormData.organizationNumber}
-                      onChange={(e) => setWorkshopFormData({ ...workshopFormData, organizationNumber: e.target.value })}
-                      placeholder="XXXXXX-XXXX"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Workshop Contact Person */}
-              <div>
-                <h3 className="text-xl font-semibold text-teal-700 mb-4 pb-2 border-b-2 border-teal-600">
-                  Verkstadens kontaktperson
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <Label htmlFor="contactPerson">Handläggare</Label>
-                    <Input
-                      id="contactPerson"
-                      value={workshopFormData.contactPerson}
-                      onChange={(e) => setWorkshopFormData({ ...workshopFormData, contactPerson: e.target.value })}
-                      placeholder="Namn"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">Telefon</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="+46 XX XXX XX XX"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email">E-mail</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="exempel@email.se"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Workshop Diagnosis */}
-              <div>
-                <h3 className="text-xl font-semibold text-teal-700 mb-4 pb-2 border-b-2 border-teal-600">
-                  Verkstadsdiagnos
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="diagnosis">Beskriv skadan</Label>
-                    <Textarea
-                      id="diagnosis"
-                      value={workshopFormData.diagnosis}
-                      onChange={(e) => setWorkshopFormData({ ...workshopFormData, diagnosis: e.target.value })}
-                      placeholder="Beskriv skadan detaljerat..."
-                      rows={4}
-                      className="resize-none"
-                    />
-                    <p className="text-sm text-gray-500 mt-1">
-                      Bifoga gärna bilder och dokument till skadeanmälan (tumregel är minst 5 bilder).
-                    </p>
-                  </div>
-
-                  <div className="space-y-3 pt-4">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="paintwork"
-                        checked={workshopFormData.paintworkNeeded}
-                        onCheckedChange={(checked) =>
-                          setWorkshopFormData({ ...workshopFormData, paintworkNeeded: checked as boolean })
-                        }
-                      />
-                      <label
-                        htmlFor="paintwork"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Krävs lackarbete?
-                      </label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="windscreen"
-                        checked={workshopFormData.windscreenReplacement}
-                        onCheckedChange={(checked) =>
-                          setWorkshopFormData({ ...workshopFormData, windscreenReplacement: checked as boolean })
-                        }
-                      />
-                      <label
-                        htmlFor="windscreen"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Behövs rutbyte eller är detta redan utfört?
-                      </label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="drugs"
-                        checked={workshopFormData.drugsAlcohol}
-                        onCheckedChange={(checked) =>
-                          setWorkshopFormData({ ...workshopFormData, drugsAlcohol: checked as boolean })
-                        }
-                      />
-                      <label
-                        htmlFor="drugs"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Har förare, ert vetande, varit påverkad av alkohol/droger/läkemedel vid skadetillfället?
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Submit Buttons */}
-              <div className="flex gap-4 pt-4">
-                <Button onClick={handleSubmit} className="bg-teal-600 hover:bg-teal-700">
-                  Skicka anmälan
-                </Button>
-                <Button type="button" variant="outline" className="border-teal-600 text-teal-600 hover:bg-teal-50">
-                  Spara utkast
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <VehicleDamageForm />
       </div>
       <Footer />
     </div>
