@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Download } from "lucide-react";
@@ -7,39 +8,60 @@ import heroOcean from "@/assets/pictureocean.jpg";
 import carAutumn from "@/assets/car-autumn.jpg";
 import carRoad from "@/assets/car-road.jpg";
 
+interface Product {
+  id: string;
+  name: string;
+  durationMonths: number;
+  premium: number;
+  vehicleType: string;
+  maxAge: number;
+  maxKm: number;
+  maxHk: number;
+  pdfUrl: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  message: string;
+  count: number;
+  products: Product[];
+}
+
 const Produkter = () => {
-  const warranties = [
-    {
-      name: "Brons",
-      details: ["Säkerhet tillbringat", "0-30 dagar", "upp till SEK 3000", "Upp till 60 år eller", "med mätarställning 30 000km"],
-      color: "bg-card",
-    },
-    {
-      name: "Silver",
-      details: ["Läkarstyrkta sjk", "1-6 månader", "SEK 6 000 - SEK 10 000", "Upp till 90% värde", "30-100 000km"],
-      color: "bg-card",
-    },
-    {
-      name: "Guld",
-      details: ["Garantier upp till", "12-24 månader", "SEK 15 000 - 30 000", "- Värde äldsta >10", "- 100 000 - 200 000km"],
-      color: "bg-card",
-    },
-    {
-      name: "Platina",
-      details: ["HELT ÅRS", "ombud: 12-24 mån", "upp till kr 60 000", "Upp till 15 år (utan växelbyte)", "+ Mätarställning 300 000km"],
-      color: "bg-card",
-    },
-    {
-      name: "Sport",
-      details: ["Förstärkt försäkring", "6-24 månader", "SEK 30 000 - 60 000", "Upp till 15 år gammal", "Mätarställning 0-300 000"],
-      color: "bg-card",
-    },
-    {
-      name: "Electric",
-      details: ["El/Hybrid garantier", "12-24 månader", "Upp till SEK 60 000", "Avser även batterier", "+ Mätarställning upp 300 000km"],
-      color: "bg-card",
-    },
-  ];
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
+
+  useEffect(() => {
+    const fetchWarranties = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${apiBaseUrl}/api/v1/products`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: ApiResponse = await response.json();
+
+        if (data.success && data.products) {
+          setProducts(data.products);
+          setError(null);
+        } else {
+          throw new Error('Invalid API response');
+        }
+      } catch (error) {
+        console.error('Error fetching warranties:', error);
+        setError('Kunde inte ladda garantier. Vänligen försök igen senare.');
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWarranties();
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -98,27 +120,67 @@ const Produkter = () => {
             Garantier för personbilar
           </h2>
           <p className="text-center text-primary-foreground mb-12">
-            Hos oss kan du teckna garantier på bilar upp till 20 år gamla eller med en mätarställning på upp till 30 000km. 
+            Hos oss kan du teckna garantier på bilar upp till 20 år gamla eller med en mätarställning på upp till 30 000km.
             Läs mer om våra produkter nedan, du kan även ladda ner produktinformationen för respektive garanti.
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {warranties.map((warranty) => (
-              <Card key={warranty.name} className={`p-6 ${warranty.color}`}>
-                <h3 className="text-2xl font-bold mb-4">{warranty.name}</h3>
-                <ul className="space-y-2 mb-6 text-sm">
-                  {warranty.details.map((detail, i) => (
-                    <li key={i}>{detail}</li>
-                  ))}
-                </ul>
-                <Button variant="secondary" className="w-full rounded-full">
-                  <Download className="mr-2" size={16} />
-                  PDF
-                  <span className="text-xs ml-1">Ladda ner produktblad</span>
-                </Button>
-              </Card>
-            ))}
-          </div>
+          {error && (
+            <div className="max-w-6xl mx-auto mb-6">
+              <div className="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded">
+                {error}
+              </div>
+            </div>
+          )}
+
+          {loading ? (
+            <div className="flex justify-center items-center min-h-[400px]">
+              <div className="text-primary-foreground text-lg">
+                Laddar garantier...
+              </div>
+            </div>
+          ) : products.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {products.map((product) => (
+                <Card key={product.id} className="p-6 bg-card">
+                  <h3 className="text-2xl font-bold mb-4">{product.name}</h3>
+                  <ul className="space-y-2 mb-6 text-sm">
+                    <li>Varaktighet: {product.durationMonths} månader</li>
+                    <li>Premie: SEK {product.premium.toLocaleString('sv-SE')}</li>
+                    <li>Fordonstyp: {product.vehicleType}</li>
+                    <li>Max ålder: {product.maxAge} år</li>
+                    <li>Max km: {product.maxKm.toLocaleString('sv-SE')} km</li>
+                    {product.maxHk > 0 && <li>Max hästkrafter: {product.maxHk} hk</li>}
+                  </ul>
+                  {product.pdfUrl ? (
+                    <Button
+                      variant="secondary"
+                      className="w-full rounded-full"
+                      onClick={() => window.open(apiBaseUrl + product.pdfUrl, '_blank')}
+                    >
+                      <Download className="mr-2" size={16} />
+                      PDF
+                      <span className="text-xs ml-1">Ladda ner produktblad</span>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="secondary"
+                      className="w-full rounded-full"
+                      disabled
+                    >
+                      <Download className="mr-2" size={16} />
+                      PDF ej tillgänglig
+                    </Button>
+                  )}
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="flex justify-center items-center min-h-[400px]">
+              <div className="text-primary-foreground text-lg">
+                Inga garantier tillgängliga för närvarande.
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
