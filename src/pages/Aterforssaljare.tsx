@@ -8,8 +8,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import heroOcean from "@/assets/pictureocean.jpg";
 
-import carGarage from "@/assets/car-garage.jpg";
+import carGarage from "@/assets/picutrecars.jpg";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 const Aterforssaljare = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,12 @@ const Aterforssaljare = () => {
     email: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -65,19 +71,24 @@ const Aterforssaljare = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      
+
       {/* Hero */}
-      <section 
+      <section
         className="relative min-h-[400px] flex items-center justify-center bg-cover bg-center pt-20"
         style={{ backgroundImage: `url(${heroOcean})` }}
       >
         <div className="absolute inset-0 bg-primary/40"></div>
         <div className="relative z-10 container mx-auto px-4 text-center">
           <div className="space-y-6 max-w-md mx-auto">
-            <Button size="lg" variant="secondary" className="w-full rounded-full text-xl py-6">
-              LOGGA IN
-            </Button>
-            <Button size="lg" variant="secondary" className="w-full rounded-full text-xl py-6">
+            <Link to="https://dealer.mobilitypartner.se" className="flex items-center gap-2">
+              <Button size="lg" variant="secondary" className="w-full rounded-full text-xl py-6">
+                LOGGA IN
+              </Button>
+            </Link>
+
+            <Button size="lg"
+              onClick={() => scrollToSection('kontakt-form')}
+              variant="secondary" className="w-full rounded-full text-xl py-6">
               BLI PARTNER
             </Button>
           </div>
@@ -88,11 +99,11 @@ const Aterforssaljare = () => {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Kontakta oss</h2>
-          
+
           <div className="max-w-3xl mx-auto mb-12">
             <h3 className="text-2xl font-bold mb-6">Så blir du en av oss</h3>
             <p className="text-muted-foreground mb-8">
-              Vill du bli en del av vårt nätverk och erbjuda dina kunder trygghet? 
+              Vill du bli en del av vårt nätverk och erbjuda dina kunder trygghet?
               Så här enkelt är det:
             </p>
 
@@ -129,7 +140,7 @@ const Aterforssaljare = () => {
                   <div>
                     <h4 className="font-bold mb-2">Du är snabbt igång</h4>
                     <p className="text-sm text-muted-foreground">
-                      Vi finns alltid här för dig, när du behöver hjälp eller har frågor. 
+                      Vi finns alltid här för dig, när du behöver hjälp eller har frågor.
                       Du erbjuds även kostnadsfri utbildning samt kontinuerlig support med personlig kontakt.
                     </p>
                   </div>
@@ -145,10 +156,10 @@ const Aterforssaljare = () => {
       </section>
 
       {/* Partnership Application Form */}
-      <section className="py-16 bg-primary">
+      <section className="py-16 bg-primary" id="kontakt-form">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-            <div 
+            <div
               className="h-[600px] bg-cover bg-center rounded-lg"
               style={{ backgroundImage: `url(${carGarage})` }}
             ></div>
@@ -157,7 +168,7 @@ const Aterforssaljare = () => {
               <h2 className="text-3xl font-bold text-primary-foreground mb-8">
                 Ansök om partnerskap
               </h2>
-              
+
               <form onSubmit={handleSubmit}>
                 <Card className="p-8 bg-card">
                   <div className="space-y-6">
@@ -166,7 +177,7 @@ const Aterforssaljare = () => {
                       <Input
                         id="companyName"
                         value={formData.companyName}
-                        onChange={(e) => setFormData({...formData, companyName: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                         className="rounded-full"
                         required
                       />
@@ -177,7 +188,7 @@ const Aterforssaljare = () => {
                       <Input
                         id="orgNumber"
                         value={formData.orgNumber}
-                        onChange={(e) => setFormData({...formData, orgNumber: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, orgNumber: e.target.value })}
                         className="rounded-full"
                         required
                       />
@@ -189,7 +200,7 @@ const Aterforssaljare = () => {
                         id="phone"
                         type="tel"
                         value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         className="rounded-full"
                         required
                       />
@@ -201,7 +212,7 @@ const Aterforssaljare = () => {
                         id="email"
                         type="email"
                         value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="rounded-full"
                         required
                       />

@@ -2,8 +2,8 @@ import { Card } from "@/components/ui/card";
 import { Phone, Mail, MapPin } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import heroOcean from "@/assets/pictureocean.jpg";
-import carDetail from "@/assets/car-detail.jpg";
+import heroOcean from "@/assets/picbuilding.jpg";
+import carDetail from "@/assets/picture2.jpg";
 import mountainRoad from "@/assets/mountain-road.jpg";
 
 const OmOss = () => {

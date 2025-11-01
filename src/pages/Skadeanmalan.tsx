@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Search, Wrench } from "lucide-react";
+import { Search, Wrench, ChevronDown } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import heroOcean from "@/assets/pictureocean.jpg";
@@ -18,6 +18,7 @@ import VehicleDamageForm from "@/components/VehicleDamageForm";
 const Skadeanmalan = () => {
   const [activeForm, setActiveForm] = useState<"damaged" | "workshop">("damaged");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [expandedStep, setExpandedStep] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     registrationNumber: "",
     mileage: "",
@@ -25,7 +26,14 @@ const Skadeanmalan = () => {
     lastname: "",
     phone: "",
     email: "",
+    personnummer: "",
+    address: "",
+    postnummer: "",
+    ort: "",
+    skadedatum: "",
     damageDescription: "",
+    meterReadingImage: null as File | null,
+    descriptionFiles: [] as File[],
   });
 
   const [workshopFormData, setWorkshopFormData] = useState({
@@ -75,22 +83,41 @@ const Skadeanmalan = () => {
     setIsSubmitting(true);
 
     try {
+      // Create FormData for multipart/form-data
+      const formDataToSend = new FormData();
+
+      // Append all text fields
+      formDataToSend.append('registrationNumber', formData.registrationNumber);
+      formDataToSend.append('mileage', formData.mileage);
+      formDataToSend.append('firstname', formData.firstname);
+      formDataToSend.append('lastname', formData.lastname);
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('personnummer', formData.personnummer);
+      formDataToSend.append('address', formData.address);
+      formDataToSend.append('postnummer', formData.postnummer);
+      formDataToSend.append('ort', formData.ort);
+      formDataToSend.append('skadedatum', formData.skadedatum);
+      formDataToSend.append('damageDescription', formData.damageDescription);
+      formDataToSend.append('submittedAt', new Date().toISOString());
+
+      // Append required meter reading image
+      if (formData.meterReadingImage) {
+        formDataToSend.append('meterReadingImage', formData.meterReadingImage);
+      }
+
+      // Append optional description files
+      if (formData.descriptionFiles.length > 0) {
+        formData.descriptionFiles.forEach((file, index) => {
+          formDataToSend.append(`descriptionFiles`, file);
+        });
+      }
+
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
       const response = await fetch(`${apiBaseUrl}/api/warranties/submit-claim`, {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          registrationNumber: formData.registrationNumber,
-          mileage: formData.mileage,
-          firstname: formData.firstname,
-          lastname: formData.lastname,
-          phone: formData.phone,
-          email: formData.email,
-          damageDescription: formData.damageDescription,
-          submittedAt: new Date().toISOString(),
-        }),
+        body: formDataToSend,
+        // Note: Don't set Content-Type header - browser will set it automatically with boundary
       });
 
       if (!response.ok) {
@@ -110,8 +137,21 @@ const Skadeanmalan = () => {
         lastname: "",
         phone: "",
         email: "",
+        personnummer: "",
+        address: "",
+        postnummer: "",
+        ort: "",
+        skadedatum: "",
         damageDescription: "",
+        meterReadingImage: null,
+        descriptionFiles: [],
       });
+
+      // Reset file inputs
+      const meterReadingInput = document.getElementById('meterReadingImage') as HTMLInputElement;
+      const descriptionFilesInput = document.getElementById('descriptionFiles') as HTMLInputElement;
+      if (meterReadingInput) meterReadingInput.value = '';
+      if (descriptionFilesInput) descriptionFilesInput.value = '';
 
     } catch (error) {
       console.error('Error submitting claim:', error);
@@ -237,7 +277,7 @@ const Skadeanmalan = () => {
         </div>
       </section>
 
-      <section id="damage-process-section" className="py-16 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${pictureCars})` }}>
+      <section id="damage-process-section" className="py-16 bg-muted bg-cover bg-center min-h-[800px]" style={{ backgroundImage: `url(${pictureCars})` }}>
         <div className="relative overflow-hidden from-teal-700 to-teal-900 text-white">
 
 
@@ -249,15 +289,34 @@ const Skadeanmalan = () => {
 
             <div className="space-y-6">
               {processSteps.map((step) => (
-                <Card key={step.number} className="bg-teal-800/90 border-teal-700 text-white backdrop-blur-sm hover:bg-teal-800 transition-colors">
+                <Card key={step.number} className="bg-teal-800/90 border-teal-700 text-white backdrop-blur-sm hover:bg-teal-800 transition-colors"
+                  onClick={() => setExpandedStep(expandedStep === step.number ? null : step.number)}
+                >
                   <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
+                    <div
+                      className="flex items-start gap-4 cursor-pointer"
+                    >
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center font-bold text-sm">
                         {step.number}
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                        <p className="text-teal-100 text-sm leading-relaxed">{step.description}</p>
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-xl font-semibold">{step.title}</h3>
+                          <ChevronDown
+                            className={`w-6 h-6 transition-transform duration-300 ${expandedStep === step.number ? 'rotate-180' : ''
+                              }`}
+                          />
+                        </div>
+                        <div
+                          className="grid transition-all duration-300 ease-in-out"
+                          style={{
+                            gridTemplateRows: expandedStep === step.number ? '1fr' : '0fr',
+                          }}
+                        >
+                          <div className="overflow-hidden">
+                            <p className="text-teal-100 text-sm leading-relaxed mt-2">{step.description}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -278,15 +337,16 @@ const Skadeanmalan = () => {
               <div className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <Label htmlFor="registrationNumber">Registreringsnummer</Label>
+                    <Label htmlFor="personnummer">Personnummer</Label>
                     <Input
-                      id="registrationNumber"
-                      value={formData.registrationNumber}
-                      onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value })}
+                      id="personnummer"
+                      value={formData.personnummer}
+                      onChange={(e) => setFormData({ ...formData, personnummer: e.target.value })}
                       className="rounded-full"
+                      placeholder="ÅÅÅÅMMDD-XXXX"
                     />
                   </div>
-                  <div>
+                  {/* <div>
                     <Label htmlFor="mileage">Miltal</Label>
                     <Input
                       id="mileage"
@@ -294,7 +354,7 @@ const Skadeanmalan = () => {
                       onChange={(e) => setFormData({ ...formData, mileage: e.target.value })}
                       className="rounded-full"
                     />
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -341,7 +401,62 @@ const Skadeanmalan = () => {
                   </div>
                 </div>
 
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="registrationNumber">Registreringsnummer</Label>
+                    <Input
+                      id="registrationNumber"
+                      value={formData.registrationNumber}
+                      onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value })}
+                      className="rounded-full"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="skadedatum">Skadedatum</Label>
+                    <Input
+                      id="skadedatum"
+                      type="date"
+                      value={formData.skadedatum}
+                      onChange={(e) => setFormData({ ...formData, skadedatum: e.target.value })}
+                      className="rounded-full"
+                    />
+                  </div>
+                </div>
+
                 <div>
+                  <Label htmlFor="address">Adress</Label>
+                  <Input
+                    id="address"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className="rounded-full"
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="postnummer">Postnummer</Label>
+                    <Input
+                      id="postnummer"
+                      value={formData.postnummer}
+                      onChange={(e) => setFormData({ ...formData, postnummer: e.target.value })}
+                      className="rounded-full"
+                      placeholder="123 45"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="ort">Ort</Label>
+                    <Input
+                      id="ort"
+                      value={formData.ort}
+                      onChange={(e) => setFormData({ ...formData, ort: e.target.value })}
+                      className="rounded-full"
+                    />
+                  </div>
+                </div>
+
+                {/* <div>
                   <Label htmlFor="damageDescription">Skadebeskrivning</Label>
                   <Textarea
                     id="damageDescription"
@@ -350,13 +465,66 @@ const Skadeanmalan = () => {
                     rows={6}
                     className="rounded-2xl"
                   />
+                </div> */}
+
+                <div>
+                  <Label htmlFor="meterReadingImage" className="text-base font-semibold">
+                    Mätarställning vid skadedatum <span className="text-red-500">*</span>
+                  </Label>
+                  <p className="text-sm text-muted-foreground mb-2">Bifogad bild krävs</p>
+                  <Input
+                    id="meterReadingImage"
+                    type="file"
+                    accept="image/*"
+                    required
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      setFormData({ ...formData, meterReadingImage: file });
+                    }}
+                    className="rounded-full"
+                  />
+                  {formData.meterReadingImage && (
+                    <p className="text-sm text-green-600 mt-2">
+                      Vald fil: {formData.meterReadingImage.name}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="descriptionFiles" className="text-base font-semibold">
+                    Beskrivning av skadan (Valfritt)
+                  </Label>
+                  <p className="text-sm text-muted-foreground mb-2">Du kan bifoga flera filer</p>
+                  <Input
+                    id="descriptionFiles"
+                    type="file"
+                    accept="image/*,application/pdf,.doc,.docx"
+                    multiple
+                    onChange={(e) => {
+                      const files = e.target.files ? Array.from(e.target.files) : [];
+                      setFormData({ ...formData, descriptionFiles: files });
+                    }}
+                    className="rounded-full"
+                  />
+                  {formData.descriptionFiles.length > 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm text-green-600 font-semibold">
+                        {formData.descriptionFiles.length} fil(er) valda:
+                      </p>
+                      <ul className="text-sm text-muted-foreground list-disc list-inside">
+                        {formData.descriptionFiles.map((file, index) => (
+                          <li key={index}>{file.name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
                 <Button
                   type="submit"
                   size="lg"
                   variant="secondary"
-                  className="bg-primary text-white w-half rounded-full"
+                  className="bg-primary text-white w-half rounded-full hover:bg-[#4ab7a7] mx-auto block"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'SKICKAR...' : 'SKICKA IN'}

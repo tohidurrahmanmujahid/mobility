@@ -5,6 +5,8 @@ import { ArrowRight, Badge, QrCode } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import heroOcean from "@/assets/pictureocean.jpg";
+import pictureWood from "@/assets/picturewoods.jpg";
+import pictureCar from "@/assets/picture4.jpg";
 import carAutumn from "@/assets/picturecars.jpg";
 import carRoad from "@/assets/car-road.jpg";
 
@@ -49,9 +51,9 @@ const Home = () => {
                   size="lg"
                   variant="outline"
 
-                  className="bg-white text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
+                  className="bg-[#d2cbb8] text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
                 >
-                  <Link to="/produkter">Våra garantier</Link>
+                  <Link to="/produkter">VÅRA GARANTIER</Link>
 
                 </Button>
               </div>
@@ -62,7 +64,7 @@ const Home = () => {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="bg-white text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
+                    className="bg-[#d2cbb8] text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
                   >
                     <Link to="/Skadeanmalan">SKADEANMÄLAN</Link>
                   </Button>
@@ -87,7 +89,7 @@ const Home = () => {
       </section>
       <section className="relative min-h-[500px] bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-1 gap-12 items-center">
             {/* Left Content */}
             <div className="space-y-8">
 
@@ -96,9 +98,12 @@ const Home = () => {
                   Mobilitypartner
                 </h1>
 
-                <p className="text-lg text-gray-600 leading-relaxed max-w-xl">
-                  I samarbete med Gjensidige Försäkring kan vi erbjuda bilägare ett trygare köp.
-                  Hos utvalda fordonstandlare kan du idag få denna garanti.</p>
+                <p className="text-lg text-gray-600 leading-relaxed w-full">
+                  Vi erbjuder bilägare ett tryggare och mer bekymmersfritt bilköp. Hos utvalda fordons­handlare kan du idag få en omfattande begagnatgaranti som skyddar dig mot oväntade kostnader om något skulle hända med bilen efter köpet.
+
+                  En garanti ger dig extra trygghet och visar att bilen är noggrant kontrollerad och i gott skick vid leverans. Skulle något mot förmodan gå fel, slipper du oroa dig för dyra reparationer, garantin täcker många av de viktigaste komponenterna i bilen.
+
+                  Att köpa en begagnad bil med garanti är därför inte bara en säkerhetsåtgärd, utan också en kvalitetsstämpel som gör ditt bilägande enklare, tryggare och mer förutsägbart.</p>
               </div>
 
               {/* <div className="flex flex-col sm:flex-row gap-4">
@@ -120,7 +125,7 @@ const Home = () => {
             </div>
 
             {/* Right Product Mockup */}
-            <div className="relative lg:block hidden">
+            {/* <div className="relative lg:block hidden">
               <Card className="p-8 flex items-center justify-center bg-card">
                 <div className="text-center">
                   <div className="w-32 h-32 mx-auto mb-4 bg-primary rounded-3xl flex items-center justify-center">
@@ -129,13 +134,13 @@ const Home = () => {
                   <p className="text-sm font-semibold">SE ALLMÄNNA VILLKOR</p>
                 </div>
               </Card>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
 
       {/* Partners */}
-      <section className="py-16 bg-background">
+      {/* <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Våra partners</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -150,7 +155,7 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Become Partner CTA */}
       <section className="bg-primary">
@@ -173,19 +178,45 @@ const Home = () => {
       </section>
 
       {/* Gjensidige Partnership */}
-      <section className="py-16 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${heroOcean})` }}>
+      <section className="py-16 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${pictureWood})` }}>
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <Card className="p-8 bg-card">
-              <h2 className="text-2xl font-bold mb-4">Gjensidige</h2>
+              <h2 className="text-2xl font-bold mb-4">Välkommen till oss!</h2>
               <p className="text-muted-foreground">
-                Tillsammans med ett av nordans största försäkringsbolag hjälper vi nu svenska folket att
-                köra tryggare - med en helt ny begagnatgaranti.
+                Har du köpt en begagnatgaranti via MobilityPartner? Då har du redan tagit ett smart steg mot ett tryggare bilägande. Här kan du läsa mer om Mobilitypartner, vad din garanti omfattar och hur du enkelt går tillväga om nåogit skulle inträffa din bil. Vårt mål är att du ska känna dig trygg och nöjd.
               </p>
+              <div className="flex flex-col sm:flex-row gap-8 mt-5">
+                {/* For Businesses */}
+                <div className="space-y-3">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="bg-[#d2cbb8] text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
+                    >
+                      <Link to="/Skadeanmalan">SKADEANMÄLAN</Link>
+                    </Button>
+
+                  </div>
+                </div>
+                {/* For Job Seekers */}
+                <div className="space-y-3">
+                  <Button
+                    size="lg"
+                    variant="outline"
+
+                    className="bg-[#d2cbb8] text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
+                  >
+                    <Link to="/om-oss">OM OSS</Link>
+
+                  </Button>
+                </div>
+              </div>
             </Card>
             <div
               className="h-80 bg-cover bg-center rounded-lg"
-              style={{ backgroundImage: `url(${heroOcean})` }}
+              style={{ backgroundImage: `url(${pictureCar})` }}
             ></div>
           </div>
         </div>

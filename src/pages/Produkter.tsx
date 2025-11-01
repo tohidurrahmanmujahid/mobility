@@ -5,8 +5,9 @@ import { Download } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import heroOcean from "@/assets/pictureocean.jpg";
-import carAutumn from "@/assets/car-autumn.jpg";
-import carRoad from "@/assets/car-road.jpg";
+import carAutumn from "@/assets/picturecars.jpg";
+
+import carRoad from "@/assets/picutrecars.jpg";
 
 interface Product {
   id: string;
@@ -18,6 +19,7 @@ interface Product {
   maxKm: number;
   maxHk: number;
   pdfUrl: string;
+  description?: string;
 }
 
 interface ApiResponse {
@@ -66,9 +68,9 @@ const Produkter = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      
+
       {/* Hero */}
-      <section 
+      <section
         className="relative min-h-[400px] flex items-center justify-center bg-cover bg-center pt-20"
         style={{ backgroundImage: `url(${heroOcean})` }}
       >
@@ -87,9 +89,9 @@ const Produkter = () => {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <p className="text-center max-w-4xl mx-auto text-muted-foreground mb-12">
-            Vid köp av en begagnad bil kan oväntade kostnader för reparationer ställa till med problem. Med en 
-            begagnatgaranti säkerställer du att du och kund tillsammans kan vara trygga av kostnaderna och försäkringsskydd. Garantin omfattar 
-            plötsliga och oförutsedda fel på både mekaniska och elektriska komponenter och bidrar därmed till att minimera 
+            Vid köp av en begagnad bil kan oväntade kostnader för reparationer ställa till med problem. Med en
+            begagnatgaranti säkerställer du att du och kund tillsammans kan vara trygga av kostnaderna och försäkringsskydd. Garantin omfattar
+            plötsliga och oförutsedda fel på både mekaniska och elektriska komponenter och bidrar därmed till att minimera
             kostnaden för oförutsedda reparationer.
           </p>
         </div>
@@ -99,13 +101,13 @@ const Produkter = () => {
       <section className="py-16 bg-muted">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
-            <div 
+            <div
               className="h-96 bg-cover bg-center rounded-lg"
               style={{ backgroundImage: `url(${carAutumn})` }}
             ></div>
             <Card className="p-8 bg-card">
               <p className="text-lg">
-                <strong>En begagnatgaranti är en investering i både tryggheten och långsiktig hållbarhet,</strong> för ett 
+                <strong>Varför är garanti så viktigt?</strong> för ett
                 bilägande som är lika bekymmersfritt som ansvarsfullt.
               </p>
             </Card>
@@ -139,32 +141,41 @@ const Produkter = () => {
               </div>
             </div>
           ) : products.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
               {products.map((product) => (
                 <Card key={product.id} className="p-6 bg-card">
-                  <h3 className="text-2xl font-bold mb-4">{product.name}</h3>
-                  <ul className="space-y-2 mb-6 text-sm">
-                    <li>Varaktighet: {product.durationMonths} månader</li>
-                    <li>Premie: SEK {product.premium.toLocaleString('sv-SE')}</li>
-                    <li>Fordonstyp: {product.vehicleType}</li>
-                    <li>Max ålder: {product.maxAge} år</li>
-                    <li>Max km: {product.maxKm.toLocaleString('sv-SE')} km</li>
-                    {product.maxHk > 0 && <li>Max hästkrafter: {product.maxHk} hk</li>}
-                  </ul>
+                  <h3 className="text-2xl font-bold mb-2">{product.name}</h3>
+                  <p className="text-sm mb-2">{product.description}</p>
+                  <div className="flex">
+                    <ul className="space-y-2 mb-6 ml-10 mr-10 text-sm list-disc list-inside text-muted-foreground">
+                      <li> {product.durationMonths} månader</li>
+                      <li> SEK {product.premium.toLocaleString('sv-SE')}</li>
+                      <li> {product.vehicleType}</li>
+
+                    </ul>
+                    <ul className="space-y-2 mb-6 ml-10 text-sm list-disc list-inside text-muted-foreground">
+                      <li> {product.maxAge} år</li>
+                      <li> {product.maxKm.toLocaleString('sv-SE')} km</li>
+                      {product.maxHk > 0 && <li>{product.maxHk} hk</li>}
+                    </ul>
+                  </div>
+
                   {product.pdfUrl ? (
-                    <Button
-                      variant="secondary"
-                      className="w-full rounded-full"
+                    <div
+                      className="w-1/2 rounded-full p-5 bg-[#4ab7a7] text-white text-center flex-column items-center justify-center hover:bg-[#4ab7a7]-600 cursor-pointer mx-auto"
                       onClick={() => window.open(apiBaseUrl + product.pdfUrl, '_blank')}
                     >
-                      <Download className="mr-2" size={16} />
-                      PDF
-                      <span className="text-xs ml-1">Ladda ner produktblad</span>
-                    </Button>
+                      <div className="text-center text-black text-bold text-lg">
+                        {/* <Download className="mr-2" size={16} /> */}
+                        PDF
+                      </div>
+
+                      <span className="text-xs ml-1  text-black bold">För fullständiga villkor</span>
+                    </div>
                   ) : (
                     <Button
                       variant="secondary"
-                      className="w-full rounded-full"
+                      className="w-full rounded-full bg-[#4ab7a7]"
                       disabled
                     >
                       <Download className="mr-2" size={16} />
@@ -188,13 +199,13 @@ const Produkter = () => {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto flex gap-8 items-start">
-            <div 
+            <div
               className="w-48 h-48 bg-cover bg-center rounded-lg flex-shrink-0"
               style={{ backgroundImage: `url(${carRoad})` }}
             ></div>
             <div>
               <p className="mb-4">
-                <strong>Tecknande av garanti görs hos bilhandlaren vid köp av fordon.</strong> Garantibeviset skickas till dig vid köpet. 
+                <strong>Tecknande av garanti görs hos bilhandlaren vid köp av fordon.</strong> Garantibeviset skickas till dig vid köpet.
                 Därför är det viktigt att bilhandlaren har rätt kontaktuppgifter till dig.
               </p>
               <p>
