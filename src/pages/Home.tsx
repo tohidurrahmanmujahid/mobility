@@ -9,6 +9,9 @@ import pictureWood from "@/assets/picturewoods.jpg";
 import pictureCar from "@/assets/picture4.jpg";
 import carAutumn from "@/assets/picturecars.jpg";
 import carRoad from "@/assets/car-road.jpg";
+import GjensidigeHero from "@/components/Gjensidigehero";
+import ocean from "@/assets/picocean2.jpg";
+import gjensidigehero  from "@/assets/gjensidige-dark.png";
 
 const Home = () => {
   const partners = [
@@ -184,7 +187,7 @@ const Home = () => {
             <Card className="p-8 bg-card">
               <h2 className="text-2xl font-bold mb-4">Välkommen till oss!</h2>
               <p className="text-muted-foreground">
-                Har du köpt en begagnatgaranti via MobilityPartner? Då har du redan tagit ett smart steg mot ett tryggare bilägande. Här kan du läsa mer om Mobilitypartner, vad din garanti omfattar och hur du enkelt går tillväga om nåogit skulle inträffa din bil. Vårt mål är att du ska känna dig trygg och nöjd.
+                Har du köpt en begagnatgaranti via MobilityPartner? Då har du redan tagit ett smart steg mot ett tryggare bilägande. Här kan du läsa mer om Mobilitypartner, vad din garanti omfattar och hur du enkelt går tillväga om något skulle inträffa din bil. Vårt mål är att du ska känna dig trygg och nöjd.
               </p>
               <div className="flex flex-col sm:flex-row gap-8 mt-5">
                 {/* For Businesses */}
@@ -221,6 +224,14 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+
+      <GjensidigeHero
+        backgroundImage={ocean}
+        logoImage={gjensidigehero}
+        title="Gjensidige"
+        description="Tillsammans med ett av nordens största försäkringsbolag hjälper vi nu svenska folket att köra tryggare - med en helt ny begagnatgaranti."
+      />
 
       <Footer />
     </div>

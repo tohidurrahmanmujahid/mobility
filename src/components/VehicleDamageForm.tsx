@@ -252,7 +252,7 @@ const VehicleDamageForm = () => {
                                 {/* Organization Number with Search */}
                                 <div className="relative">
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Organisationsnummer : <span className="text-red-500">*</span>
+                                        Organisationsnummer <span className="text-red-500">*</span>
                                     </label>
                                     <div className="flex gap-2">
                                         <input
@@ -279,7 +279,7 @@ const VehicleDamageForm = () => {
 
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Kontaktperson : <span className="text-red-500">*</span>
+                                        Kontaktperson <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -293,7 +293,7 @@ const VehicleDamageForm = () => {
 
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Telefon : <span className="text-red-500">*</span>
+                                        Telefon <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="tel"
@@ -306,7 +306,7 @@ const VehicleDamageForm = () => {
 
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        E-mail : <span className="text-red-500">*</span>
+                                        Email <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="email"
@@ -340,7 +340,7 @@ const VehicleDamageForm = () => {
                                 {/* Registration Number with Autocomplete */}
                                 <div className="relative">
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Reg-nr : <span className="text-red-500">*</span>
+                                        Regnr <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -368,7 +368,7 @@ const VehicleDamageForm = () => {
                                 {/* Damage Date */}
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Skadedatum : <span className="text-red-500">*</span>
+                                        Skadedatum <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <input
@@ -384,7 +384,7 @@ const VehicleDamageForm = () => {
                                 {/* Owner Information */}
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Ägare : <span className="text-red-500">*</span>
+                                        Ägare <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -398,7 +398,7 @@ const VehicleDamageForm = () => {
 
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Ägare - Telefon :
+                                        Ägare Telefon
                                     </label>
                                     <input
                                         type="tel"
@@ -411,7 +411,7 @@ const VehicleDamageForm = () => {
 
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Ägare - E-mail :
+                                        Ägare E-mail
                                     </label>
                                     <input
                                         type="email"
@@ -425,7 +425,7 @@ const VehicleDamageForm = () => {
                                 {/* Odometer Readings */}
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Mätarställning vid skadetilfället : <span className="text-red-500">*</span>
+                                        Mätarställning vid skadetilfället <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -439,7 +439,7 @@ const VehicleDamageForm = () => {
 
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Datum senaste service : <span className="text-red-500">*</span>
+                                        Datum senaste service <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="date"
@@ -452,7 +452,7 @@ const VehicleDamageForm = () => {
 
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Mätarställning senaste service : <span className="text-red-500">*</span>
+                                        Mätarställning senaste service <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -466,7 +466,7 @@ const VehicleDamageForm = () => {
 
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Serviceinformation saknas :
+                                        Serviceinformation saknas
                                     </label>
                                     <label className="flex items-center">
                                         <input
@@ -483,7 +483,7 @@ const VehicleDamageForm = () => {
                                 {/* Description of Damage */}
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Ägarens beskrivning av skada : <span className="text-red-500">*</span>
+                                        Ägarens beskrivning av skada <span className="text-red-500">*</span>
                                     </label>
                                     <textarea
                                         name="agarensBeskrivning"
@@ -497,7 +497,7 @@ const VehicleDamageForm = () => {
 
                                 <div>
                                     <label className="block text-sm text-gray-600 mb-1">
-                                        Fordonet står på verkstad :
+                                        Fordonet står på verkstad
                                     </label>
                                     <input
                                         type="text"
@@ -527,7 +527,7 @@ const VehicleDamageForm = () => {
                             {/* Cause of Damage */}
                             <div>
                                 <label className="block text-sm text-gray-600 mb-1">
-                                    Skadeorsak :
+                                    Skadeorsak
                                 </label>
                                 <textarea
                                     name="skadeorsak"

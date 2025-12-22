@@ -5,14 +5,15 @@ import Footer from "@/components/Footer";
 import heroOcean from "@/assets/picbuilding.jpg";
 import carDetail from "@/assets/picture2.jpg";
 import mountainRoad from "@/assets/mountain-road.jpg";
+import gjensidigehero from "@/assets/gjensidige-dark.png";
 
 const OmOss = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      
+
       {/* Hero */}
-      <section 
+      <section
         className="relative min-h-[400px] flex items-center justify-center bg-cover bg-center pt-20"
         style={{ backgroundImage: `url(${heroOcean})` }}
       >
@@ -28,7 +29,7 @@ const OmOss = () => {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-start max-w-6xl mx-auto">
-            <div 
+            <div
               className="h-96 bg-cover bg-center rounded-lg"
               style={{ backgroundImage: `url(${carDetail})` }}
             ></div>
@@ -64,39 +65,27 @@ const OmOss = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
             <Card className="p-8 bg-primary text-primary-foreground">
-              <h2 className="text-3xl font-bold mb-6">Om oss</h2>
+              <h2 className="text-3xl font-bold mb-6">Om Oss</h2>
               <div className="space-y-4 text-sm">
                 <p>
-                  Mobilitypartner Norden AB är ett ung, modernt och flexibelt bilgarantier och 
-                  försäkringsbolag som till det som finansiärer. Med vår djupa kännedom om 
-                  djup branschkunskap möjliggör vi trygga bilköp för dig som kund.
+                  Mobilitypartner Norden AB erbjuder moderna och flexibla bilgarantier och försäkringslösningar till dig som privatperson. Med ett digitalt ekosystem och djup branschkunskap möjliggör vi tryggare bilköp för dig som kund.
+                  Vi är din trygga partner, vi gör det enkelt att köpa, äga och köra bil med fullständig trygghet. Vi vet att många känner en viss osäkerhet inför att investera i en begagnad bil. Därför har vi valt att specialisera oss på att erbjuda marknadens mest omfattande begagnatgarantier, så att du alltid kan känna dig säker bakom ratten.
                 </p>
                 <p>
-                  Vi är din bästa partner, ur ett års perspektiv där du väljer till er som leverantör. 
-                  Med fokus på att följa upp era behov vivet ett nära samband med våra kunder i vad vi betraktar 
-                  som många nyckelrelationer. Vi lever för att erbjuda ett brett utbud av service.
+                  Vår filosofi är enkel: en bilaffär ska präglas av förtroende, transparens och långsiktighet. Därför arbetar vi nära våra kunder för att säkerställa detta. Våra garantilösningar är utformade för att täcka det som verkligen betyder något, från oväntade reparationskostnader till extra trygghet på vägen.
                 </p>
                 <p>
-                  Vår filosofi är enkel: och brutfor dina problem med förnörenste, transparentes och 
-                  längdligheter. Genom anhets och bäst vält käll tryktar i kur och växella nät i kur över 
-                  vår bränningel känsligheter sitt även sket målerära i tjänster med vår tjänster. Vi möjligheter 
-                  kan troutnisale uppstrukendtrudeför i form och tryggat garantier.
+                  Vi möter marknadens behov av transparens, snabbhet och trygghet  med innovation som motor.  Med många års erfarenhet i branschen och ett nätverk av pålitliga partners kan vi nu erbjuda flexibla garantier.
                 </p>
                 <p>
-                  Vi möter marknadens behov av transparens, snabbhet och trygghet med 
-                  innovation som motor. Med många är erfarenhet inom mobilitetssektorer 
-                  nätverk av pålitliga partners kan vi erbjuda flexibla garantier.
+                  Vi brinner för att förändra synen på begagnatköp. Där många ser risker ser vi möjligheter, med rätt garantier och rätt service kan en begagnad bil kännas lika trygg som en ny. Vårt mål är att ge våra kunder samma känsla av frihet och säkerhet, oavsett om bilen är ny eller några år gammal.
                 </p>
                 <p>
-                  Vi erbjuder bred branschkunskap, kostnad som passar både nybörjare och erfarna inom mobilitet. 
-                  Hör gärna av dig för att utforska hur vi kan hjälpa din och andra i samarbeta med oss. 
-                  På MobilityPartner bygger vi relationer för framtiden. Vårt erbjudande är lika 
-                  kvalitet, service och trygghet garanterar att vi är partner kan vi alltid räkna 
-                  med som en pålitlig partite för vårt framtida roll.
+                  På MobilityPartner bygger vi relationer för framtiden. Vårt engagemang för kvalitet, service och trygghet genomsyrar allt vi gör. Därför kan du alltid räkna med att vi står vid din sida, även efter att affären är avslutad. Det är så vi skapar långsiktigt värde för våra kunder, varje dag.
                 </p>
               </div>
             </Card>
-            <div 
+            <div
               className="h-full min-h-[500px] bg-cover bg-center rounded-lg"
               style={{ backgroundImage: `url(${heroOcean})` }}
             ></div>
@@ -111,21 +100,22 @@ const OmOss = () => {
             <h2 className="text-3xl font-bold mb-6 text-accent">
               Garantiförsäkringen du<br />
               tecknar levereras av<br />
-              Gjensidge Försäkringår.
+              Gjensidge Försäkringar.
             </h2>
             <p className="text-muted-foreground mb-8">
-              Gjensidige försäkringar har funnits i över 200 år och är ett av 
-              Nordens mest erfarna och största försäkringsbolag. Med Gjensidige som försäkringsgivare får du alltid en 
-              objektiv bedömning i skadehänderlngen.
+              Gjensidige försäkringar har funnits i över 200 år och är ett av Nordens mest erfarna och största försäkringsbolag. Med Gjensidige som försäkringsgivare får du alltid en objektiv bedömning i skadehanteringen.
             </p>
             <div className="grid md:grid-cols-2 gap-8 items-center">
-              <Card className="p-8 bg-card">
-                <div className="bg-background p-6 rounded-lg inline-block">
-                  <h3 className="text-2xl font-bold">Gjensidige</h3>
-                  <p className="text-accent">Försäkring</p>
+              <div className="hidden md:flex items-center justify-center">
+                <div className="bg-white rounded-lg p-4 shadow-md">
+                  <img
+                    src={gjensidigehero}
+                    alt="Gjensidige Försäkring"
+                    className="h-20 md:h-24 w-auto object-contain"
+                  />
                 </div>
-              </Card>
-              <div 
+              </div>
+              <div
                 className="h-64 bg-cover bg-center rounded-lg"
                 style={{ backgroundImage: `url(${mountainRoad})` }}
               ></div>

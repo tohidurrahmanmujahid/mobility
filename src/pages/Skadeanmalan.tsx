@@ -56,22 +56,22 @@ const Skadeanmalan = () => {
     {
       number: 1,
       title: 'Mobilitypartner kontaktas av fordonsägaren',
-      description: 'Fordonsägaren hänvisar till försäkringsbolaget och mobilitypartner ifall försäkringen är giltig. Tillsammans ser vi till att det anmäls en fordonsärende påbörjas.',
+      description: 'Innan fordonet lämnas in på verkstad ska du först kontakta oss och registrera din skada. Det är viktigt att du inväntar vårt besked innan verkstadsbesöket påbörjas.',
     },
     {
       number: 2,
       title: 'Bilen lämnas på verkstad',
-      description: 'Mobilitypartnern tar emot bilen eller hämtar den. Vid behov tillhandahåller mobilitypartnern ersättningsfordon.',
+      description: 'Mobilitypartnern tar emot bilen eller hämtar den. Vid behov tillhandahåller mobilitypartnern ersättningsfordon." to "Mobilitypartner hänvisar fordonsägaren till en verkstad." Vi hänvisar dig till en verkstad, där du bokar in din bil för felsökning.',
     },
     {
       number: 3,
       title: 'Verkstaden gör skadeanmälan till oss',
-      description: 'På föreliggande formulär gör verkstaden en skadeanmälan till oss med uppgift om handläggare. Därefter gör verkstaden en diagnos och gör uppskattning av skadan och frågar oss om rätten till reparation och vi meddelar besked direkt.',
+      description: 'På föreliggande formulär gör verkstaden en skadeanmälan till oss med uppgift om handläggare. Därefter gör verkstaden en diagnos och gör uppskattning av skadan och frågar oss om rätten till reparation och vi meddelar besked direkt." to "När verkstaden har identifierat skadan och dess orsak, skickar de in en skadeanmälan till Mobilitypartner. Därefter görs bedömningen av Gjensidige Försäkringar och reparationen kan påbörjas när skadan eller felet godkänts. Detta är alltid en snabb process. Vid godkännande av reperation ersätter vi även kostnaden för felsökning.',
     },
     {
       number: 4,
       title: 'Reparationen kan påbörjas',
-      description: 'Efter att skadeanmälan är genomförd och godkänd kan verkstaden påbörja reparationen. Detta skapar en snabb process för fordonsägaren.',
+      description: 'När skadeanmälan har godkänts kan reparationen av ditt fordon påbörjas. Verkstaden återkopplar när arbetet är genomfört.',
     },
   ];
 
@@ -80,6 +80,13 @@ const Skadeanmalan = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate required description files
+    if (formData.descriptionFiles.length === 0) {
+      toast.error("Vänligen bifoga minst en fil för skadebeskrivning.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -284,7 +291,7 @@ const Skadeanmalan = () => {
           <div className="relative max-w-6xl mx-auto px-6 py-16">
             <h1 className="text-4xl font-bold mb-4">Såhär går skadeprocessen till</h1>
             <p className="text-teal-100 mb-12 max-w-2xl">
-              Vi försätter att när skadan är framme så uppstår ett flertal frågetecken, nedan beskriver vi processen kring skadehanteringen hos oss.
+              Vi förstår att när skadan är framme så uppstår ett flertal frågetecken, nedan beskriver vi processen kring skadehanteringen hos oss.
             </p>
 
             <div className="space-y-6">
@@ -492,9 +499,9 @@ const Skadeanmalan = () => {
 
                 <div>
                   <Label htmlFor="descriptionFiles" className="text-base font-semibold">
-                    Beskrivning av skadan (Valfritt)
+                    Beskrivning av skadan <span className="text-red-500">*</span>
                   </Label>
-                  <p className="text-sm text-muted-foreground mb-2">Du kan bifoga flera filer</p>
+                  <p className="text-sm text-muted-foreground mb-2">Du kan bifoga flera filer (minst en fil krävs)</p>
                   <Input
                     id="descriptionFiles"
                     type="file"
@@ -502,7 +509,9 @@ const Skadeanmalan = () => {
                     multiple
                     onChange={(e) => {
                       const files = e.target.files ? Array.from(e.target.files) : [];
-                      setFormData({ ...formData, descriptionFiles: files });
+                      setFormData({ ...formData, descriptionFiles: [...formData.descriptionFiles, ...files] });
+                      // Reset the input so the same file can be added again if needed
+                      e.target.value = '';
                     }}
                     className="rounded-full"
                   />
@@ -511,12 +520,27 @@ const Skadeanmalan = () => {
                       <p className="text-sm text-green-600 font-semibold">
                         {formData.descriptionFiles.length} fil(er) valda:
                       </p>
-                      <ul className="text-sm text-muted-foreground list-disc list-inside">
+                      <ul className="text-sm text-muted-foreground space-y-1 mt-1">
                         {formData.descriptionFiles.map((file, index) => (
-                          <li key={index}>{file.name}</li>
+                          <li key={index} className="flex items-center justify-between bg-gray-100 px-3 py-1 rounded-full">
+                            <span className="truncate mr-2">{file.name}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newFiles = formData.descriptionFiles.filter((_, i) => i !== index);
+                                setFormData({ ...formData, descriptionFiles: newFiles });
+                              }}
+                              className="text-red-500 hover:text-red-700 font-bold text-sm px-2"
+                            >
+                              ✕
+                            </button>
+                          </li>
                         ))}
                       </ul>
                     </div>
+                  )}
+                  {formData.descriptionFiles.length === 0 && (
+                    <p className="text-sm text-red-500 mt-1">Minst en fil krävs</p>
                   )}
                 </div>
 

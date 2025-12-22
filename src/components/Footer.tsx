@@ -1,4 +1,5 @@
 import { Phone, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -51,6 +52,10 @@ const Footer = () => {
               <Mail size={16} />
               <span>support@mobilitypartner.se</span>
             </div>
+
+            <Link to="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground mt-4 block">
+              Privacy Policy
+            </Link>
           </div>
         </div>
       </div>
