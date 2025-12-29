@@ -61,12 +61,12 @@ const Skadeanmalan = () => {
     {
       number: 2,
       title: 'Bilen lämnas på verkstad',
-      description: 'Mobilitypartnern tar emot bilen eller hämtar den. Vid behov tillhandahåller mobilitypartnern ersättningsfordon." to "Mobilitypartner hänvisar fordonsägaren till en verkstad." Vi hänvisar dig till en verkstad, där du bokar in din bil för felsökning.',
+      description: 'Mobilitypartner hänvisar fordonsägaren till en verkstad. Där du bokar in din bil för felsökning.',
     },
     {
       number: 3,
       title: 'Verkstaden gör skadeanmälan till oss',
-      description: 'På föreliggande formulär gör verkstaden en skadeanmälan till oss med uppgift om handläggare. Därefter gör verkstaden en diagnos och gör uppskattning av skadan och frågar oss om rätten till reparation och vi meddelar besked direkt." to "När verkstaden har identifierat skadan och dess orsak, skickar de in en skadeanmälan till Mobilitypartner. Därefter görs bedömningen av Gjensidige Försäkringar och reparationen kan påbörjas när skadan eller felet godkänts. Detta är alltid en snabb process. Vid godkännande av reperation ersätter vi även kostnaden för felsökning.',
+      description: 'När verkstaden har identifierat skadan och dess orsak, skickar de in en skadeanmälan till Mobilitypartner. Därefter görs bedömningen av Gjensidige Försäkringar och reparationen kan påbörjas när skadan eller felet godkänts. Detta är alltid en snabb process. Vid godkännande av reperation ersätter vi även kostnaden för felsökning.',
     },
     {
       number: 4,
@@ -81,9 +81,25 @@ const Skadeanmalan = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate required description files
-    if (formData.descriptionFiles.length === 0) {
-      toast.error("Vänligen bifoga minst en fil för skadebeskrivning.");
+    // Validate all required fields
+    const missingFields: string[] = [];
+
+    if (!formData.personnummer.trim()) missingFields.push("Personnummer");
+    if (!formData.firstname.trim()) missingFields.push("Förnamn");
+    if (!formData.lastname.trim()) missingFields.push("Efternamn");
+    if (!formData.phone.trim()) missingFields.push("Telefonnummer");
+    if (!formData.email.trim()) missingFields.push("E-post");
+    if (!formData.registrationNumber.trim()) missingFields.push("Registreringsnummer");
+    if (!formData.skadedatum.trim()) missingFields.push("Skadedatum");
+    if (!formData.address.trim()) missingFields.push("Adress");
+    if (!formData.postnummer.trim()) missingFields.push("Postnummer");
+    if (!formData.ort.trim()) missingFields.push("Ort");
+    if (!formData.damageDescription.trim()) missingFields.push("Beskrivning av skadan");
+    if (!formData.meterReadingImage) missingFields.push("Mätarställning (bild)");
+    if (formData.descriptionFiles.length === 0) missingFields.push("Skadebeskrivning (fil)");
+
+    if (missingFields.length > 0) {
+      toast.error(`Vänligen fyll i följande fält: ${missingFields.join(", ")}`);
       return;
     }
 
@@ -127,11 +143,15 @@ const Skadeanmalan = () => {
         // Note: Don't set Content-Type header - browser will set it automatically with boundary
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
       const result = await response.json();
+
+      if (!response.ok) {
+        // Display error message from API response
+        const errorMessage = result.message || result.error || `HTTP error! status: ${response.status}`;
+        toast.error(errorMessage);
+        console.error('API error:', result);
+        return;
+      }
 
       toast.success("Din skadeanmälan har skickats!");
       console.log('Submission successful:', result);
@@ -160,9 +180,10 @@ const Skadeanmalan = () => {
       if (meterReadingInput) meterReadingInput.value = '';
       if (descriptionFilesInput) descriptionFilesInput.value = '';
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting claim:', error);
-      toast.error("Ett fel uppstod vid skickning av skadeanmälan. Vänligen försök igen.");
+      const errorMessage = error?.message || "Ett fel uppstod vid skickning av skadeanmälan. Vänligen försök igen.";
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -476,7 +497,7 @@ const Skadeanmalan = () => {
 
                 <div>
                   <Label htmlFor="meterReadingImage" className="text-base font-semibold">
-                    Mätarställning vid skadedatum <span className="text-red-500">*</span>
+                    Mätarställning vid skadedatum
                   </Label>
                   <p className="text-sm text-muted-foreground mb-2">Bifogad bild krävs</p>
                   <Input
@@ -499,8 +520,16 @@ const Skadeanmalan = () => {
 
                 <div>
                   <Label htmlFor="descriptionFiles" className="text-base font-semibold">
-                    Beskrivning av skadan <span className="text-red-500">*</span>
+                    Beskrivning av skadan
                   </Label>
+                  <Textarea
+                    id="damageDescription"
+                    value={formData.damageDescription}
+                    onChange={(e) => setFormData({ ...formData, damageDescription: e.target.value })}
+                    rows={4}
+                    placeholder="Beskriv skadan i detalj..."
+                    className="rounded-2xl mb-4"
+                  />
                   <p className="text-sm text-muted-foreground mb-2">Du kan bifoga flera filer (minst en fil krävs)</p>
                   <Input
                     id="descriptionFiles"
