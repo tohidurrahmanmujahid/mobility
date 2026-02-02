@@ -96,7 +96,6 @@ const Skadeanmalan = () => {
     if (!formData.ort.trim()) missingFields.push("Ort");
     if (!formData.damageDescription.trim()) missingFields.push("Beskrivning av skadan");
     if (!formData.meterReadingImage) missingFields.push("Mätarställning (bild)");
-    if (formData.descriptionFiles.length === 0) missingFields.push("Skadebeskrivning (fil)");
 
     if (missingFields.length > 0) {
       toast.error(`Vänligen fyll i följande fält: ${missingFields.join(", ")}`);
@@ -530,7 +529,7 @@ const Skadeanmalan = () => {
                     placeholder="Beskriv skadan i detalj..."
                     className="rounded-2xl mb-4"
                   />
-                  <p className="text-sm text-muted-foreground mb-2">Du kan bifoga flera filer (minst en fil krävs)</p>
+                  <p className="text-sm text-muted-foreground mb-2">Du kan bifoga flera filer (valfritt)</p>
                   <Input
                     id="descriptionFiles"
                     type="file"
@@ -568,9 +567,9 @@ const Skadeanmalan = () => {
                       </ul>
                     </div>
                   )}
-                  {formData.descriptionFiles.length === 0 && (
+                  {/* {formData.descriptionFiles.length === 0 && (
                     <p className="text-sm text-red-500 mt-1">Minst en fil krävs</p>
-                  )}
+                  )} */}
                 </div>
 
                 <Button
