@@ -136,7 +136,12 @@ const Skadeanmalan = () => {
       }
 
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
-      const response = await fetch(`${apiBaseUrl}/api/warranties/submit-claim`, {
+      const apiUrl = `${apiBaseUrl}/api/warranties/submit-claim`;
+
+      console.log('Submitting to:', apiUrl);
+      console.log('Form data size:', formDataToSend);
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         body: formDataToSend,
         // Note: Don't set Content-Type header - browser will set it automatically with boundary
@@ -181,7 +186,20 @@ const Skadeanmalan = () => {
 
     } catch (error: any) {
       console.error('Error submitting claim:', error);
-      const errorMessage = error?.message || "Ett fel uppstod vid skickning av skadeanmälan. Vänligen försök igen.";
+
+      // Provide detailed error information for debugging
+      let errorMessage = "Ett fel uppstod vid skickning av skadeanmälan.";
+
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        // Network error - most common on Safari with mixed content or CORS
+        errorMessage = "Kunde inte ansluta till servern. Kontrollera din internetanslutning eller kontakta support.";
+        console.error('Network error - possible CORS or mixed content issue');
+      } else if (error.name === 'AbortError') {
+        errorMessage = "Begäran avbröts. Vänligen försök igen.";
+      } else {
+        errorMessage = error?.message || errorMessage;
+      }
+
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
