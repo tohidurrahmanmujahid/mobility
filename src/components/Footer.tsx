@@ -33,7 +33,7 @@ const Footer = () => {
               <p>Mobilitypartner Norden AB</p>
               <p>Trollhättevägen 20</p>
               <p>442 34 Kungälv</p>
-              <p>Göteborg</p>
+              {/* <p>Göteborg</p> */}
             </div>
           </div>
 
