@@ -149,7 +149,7 @@ const Aterforssaljare = () => {
             </Card>
 
             <div className="text-center p-8 bg-secondary rounded-lg">
-              <p className="text-2xl font-bold mb-2">010 - 00 00 00</p>
+              <p className="text-2xl font-bold mb-2">010 - 189 89 99</p>
             </div>
           </div>
         </div>

@@ -39,20 +39,20 @@ const OmOss = () => {
                 <div className="flex items-start gap-4">
                   <Phone className="flex-shrink-0 mt-1" size={20} />
                   <div>
-                    <p className="font-semibold">010 - 00 00 00</p>
-                    <p className="text-sm opacity-90">Mån - fre 09.00 - 16.00</p>
+                    <p className="font-semibold">010 - 189 89 99</p>
+                    <p className="text-sm opacity-90">Mån - tre 10.00 -16.00</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <MapPin className="flex-shrink-0 mt-1" size={20} />
                   <div>
-                    <p>Adress1</p>
-                    <p>Adress 2 Göteborg</p>
+                    <p>Trollhättevägen 20 </p>
+                    <p>442 34 Kungälv</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Mail className="flex-shrink-0 mt-1" size={20} />
-                  <p>Support@mobilitypartner.se</p>
+                  <p>support@mobilitypartner.se</p>
                 </div>
               </div>
             </Card>

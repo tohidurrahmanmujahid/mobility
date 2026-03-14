@@ -31,8 +31,8 @@ const Footer = () => {
             <h3 className="font-bold text-foreground mb-4">KONTAKT</h3>
             <div className="space-y-2 text-sm text-muted-foreground">
               <p>Mobilitypartner Norden AB</p>
-              <p>X</p>
-              <p>X</p>
+              <p>Trollhättevägen 20</p>
+              <p>442 34 Kungälv</p>
               <p>Göteborg</p>
             </div>
           </div>
@@ -44,9 +44,9 @@ const Footer = () => {
             
             <div className="flex items-center gap-2 text-sm text-foreground mb-2">
               <Phone size={16} />
-              <span className="font-semibold">010 - 00 00 00</span>
+              <span className="font-semibold">010-189 89 99</span>
             </div>
-            <p className="text-xs text-muted-foreground mb-4">mån - fre 09.00 - 16.00</p>
+            <p className="text-xs text-muted-foreground mb-4">Mån - tre 10.00 -16.00</p>
             
             <div className="flex items-center gap-2 text-sm text-foreground">
               <Mail size={16} />

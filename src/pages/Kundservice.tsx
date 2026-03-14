@@ -9,9 +9,9 @@ const Kundservice = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      
+
       {/* Hero */}
-      <section 
+      <section
         className="relative min-h-[400px] flex items-center justify-center bg-cover bg-center pt-20"
         style={{ backgroundImage: `url(${heroOcean})` }}
       >
@@ -21,7 +21,7 @@ const Kundservice = () => {
             FRÅGOR?
           </h1>
           <Button size="lg" variant="secondary" className="rounded-full text-2xl py-8 px-12">
-            010 - 00 00 00
+            010 - 189 89 99
           </Button>
         </div>
       </section>

@@ -11,6 +11,7 @@ import OmOss from "./pages/OmOss";
 import Aterforssaljare from "./pages/Aterforssaljare";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Undantag from "./pages/Undantag";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/om-oss" element={<OmOss />} />
           <Route path="/aterforssaljare" element={<Aterforssaljare />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/undantag" element={<Undantag />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronDown, Download } from "lucide-react";
+import { ChevronDown, Download, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import heroOcean from "@/assets/pictureocean.jpg";
@@ -238,6 +239,20 @@ const Produkter = () => {
               </div>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Undantag (Exceptions) */}
+      <section className="py-12 bg-secondary">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-2xl font-bold text-forest-foreground mb-4">Undantag</h2>
+          <Link
+            to="/undantag"
+            className="inline-flex items-center gap-2 text-lg text-[#4ab7a7] hover:text-[#3a9a8d] underline underline-offset-4 font-medium transition-colors"
+          >
+            Klicka här för att se alla undantag
+            <ExternalLink size={18} />
+          </Link>
         </div>
       </section>
 
