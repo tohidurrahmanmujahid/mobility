@@ -12,6 +12,7 @@ import carRoad from "@/assets/car-road.jpg";
 import GjensidigeHero from "@/components/Gjensidigehero";
 import ocean from "@/assets/picocean2.jpg";
 import gjensidigehero  from "@/assets/gjensidige-dark.png";
+import carfix  from "@/assets/carfix.jpg";
 
 const Home = () => {
   const partners = [
@@ -84,7 +85,7 @@ const Home = () => {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Köp begagnat med samma trygghet som nytt!</h2>
           <p className="text-muted-foreground max-w-3xl mx-auto">
-            Med våra garantier slipper du oron för oväntade kostnader – vi täcker plötsligt och oförutsedda
+            Med våra garantier slipper du oron för oväntade kostnader, vi täcker plötsligt och oförutsedda
             fel på både elektriska och mekaniska komponenter. Kör vidare med full kontroll, trygghet och
             frihet på vägen.
           </p>
@@ -228,9 +229,9 @@ const Home = () => {
 
       <GjensidigeHero
         backgroundImage={ocean}
-        logoImage={gjensidigehero}
+        logoImage={carfix}
         title="Gjensidige"
-        description="Tillsammans med ett av nordens största försäkringsbolag hjälper vi nu svenska folket att köra tryggare - med en helt ny begagnatgaranti."
+        description="På Mobilitypartner gör vi det enklare och tryggare att köpa begagnad bil. Tillsammans med etablerade partners erbjuder vi garantilösningar som skyddar mot oväntade kostnader och ger extra trygghet efter köpet. Med enkel administration, tydliga villkor och produkter framtagna med kunden i fokus hjälper vi både bilhandlare och bilköpare till en smidigare och tryggare bilaffär."
       />
 
       <Footer />

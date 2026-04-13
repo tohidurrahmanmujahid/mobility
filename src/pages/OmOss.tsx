@@ -60,6 +60,51 @@ const OmOss = () => {
         </div>
       </section>
 
+      {/* Försäkringsförmedling */}
+      <section className="py-16 bg-primary">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-[#f5e9d0]">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Försäkringsförmedling
+            </h2>
+            <div className="space-y-4 text-base md:text-lg leading-relaxed">
+              <p>
+                MobilityPartner Norden AB ("MobilityPartner") är registrerat hos
+                Bolagsverket som en anknuten sidoverksam försäkringsförmedlare till
+                Gjensidige Forsikring ASA ("Gjensidige"). Det innebär att
+                MobilityPartner förmedlar försäkringar enbart för Gjensidiges
+                räkning och inga andra försäkringsgivare.
+              </p>
+              <p>
+                MobilityPartner står under tillsyn av Finansinspektionen, och
+                registrering kan kontrolleras hos: Bolagsverket, 851 81 Sundsvall,
+                telefon 060-18 40 00, e-post:{" "}
+                <a
+                  href="mailto:bolagsverket@bolagsverket.se"
+                  className="underline hover:text-white transition-colors"
+                >
+                  bolagsverket@bolagsverket.se
+                </a>
+                ,{" "}
+                <a
+                  href="https://www.bolagsverket.se"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-white transition-colors"
+                >
+                  www.bolagsverket.se
+                </a>
+                .
+              </p>
+              <p>
+                Registreringen avser skadeförsäkringsklass 16. Annan
+                förmögenhetsskada; − annan ekonomisk förlust.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* About Us Content */}
       <section className="py-16 bg-muted">
         <div className="container mx-auto px-4">
@@ -98,13 +143,11 @@ const OmOss = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold mb-6 text-accent">
-              Garantiförsäkringen du<br />
-              tecknar levereras av<br />
-              Gjensidge Försäkringar.
+              I samarbete med  <br/>
+              Gjensidige Försäkring.
             </h2>
             <p className="text-muted-foreground mb-8">
-              Gjensidige försäkringar har funnits i över 200 år och är ett av Nordens mest erfarna och största försäkringsbolag. Med Gjensidige som försäkringsgivare får du alltid en objektiv bedömning i skadehanteringen.
-            </p>
+            Vi på MobilityPartner är måna om att du som köper en garanti ska få den hjälp du har rätt till, oavsett vilken återförsäljare du köpt din garanti från. Återförsäljare som samarbetar med MobilityPartner är därför alltid försäkrade i de fall du har rätt till ersättning från garantin. Återförsäljarens försäkring levereras av Gjensidige Försäkring, Nordens tredje största försäkringsbolag.</p>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="hidden md:flex items-center justify-center">
                 <div className="bg-white rounded-lg p-4 shadow-md">

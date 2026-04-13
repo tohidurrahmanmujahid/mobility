@@ -40,11 +40,11 @@ const GjensidigeHero: React.FC<GjensidigeHeroProps> = ({
 
         {/* Right Logo/Image */}
         <div className="hidden md:flex items-center justify-center">
-          <div className="bg-white rounded-lg p-4 shadow-md">
+          <div className="bg-white rounded-lg p-1 shadow-md">
             <img
               src={logoImage}
               alt="Gjensidige Försäkring"
-              className="h-20 md:h-24 w-auto object-contain"
+              className="h-[350px] md:h-[350px] w-auto object-contain rounded-lg"
             />
           </div>
         </div>
