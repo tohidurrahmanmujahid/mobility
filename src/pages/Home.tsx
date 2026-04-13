@@ -230,7 +230,7 @@ const Home = () => {
       <GjensidigeHero
         backgroundImage={ocean}
         logoImage={carfix}
-        title="Gjensidige"
+        title="För ett tryggare bilägande"
         description="På Mobilitypartner gör vi det enklare och tryggare att köpa begagnad bil. Tillsammans med etablerade partners erbjuder vi garantilösningar som skyddar mot oväntade kostnader och ger extra trygghet efter köpet. Med enkel administration, tydliga villkor och produkter framtagna med kunden i fokus hjälper vi både bilhandlare och bilköpare till en smidigare och tryggare bilaffär."
       />
 
