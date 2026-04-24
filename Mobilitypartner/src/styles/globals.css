@@ -1,0 +1,274 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Helvetica+Neue:ital,wght@0,100;0,200;0,300;0,400;0,500;0,700;0,900;1,100;1,200;1,300;1,400;1,500;1,700;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Color Palette */
+  --color-primary-dark: #1b5b40;
+  --color-primary-darker: #0e321e;
+  --color-primary-forest: #0d3a27;
+  --color-neutral-beige: #d2cbb8;
+  /* --color-neutral-light: #ebe7dc;
+  --color-accent-gold: #b39a5b; */
+    --color-neutral-light: #eeedea;
+  --color-accent-gold: #ebe7dc;
+  --color-accent-teal: #4ab7a7;
+
+  /* Typography */
+  --font-rubriker: 'Helvetica Neue', Arial, sans-serif;
+  --font-underrubriker: 'Open Sans', sans-serif;
+  --font-text-primary: 'Playfair Display', serif;
+  --font-text-secondary: 'Cormorant Garamond', serif;
+
+  /* Legacy support */
+  --background: var(--color-neutral-light);
+  --foreground: var(--color-primary-dark);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Custom colors */
+  --color-primary-dark: #1b5b40;
+  --color-primary-darker: #0e321e;
+  --color-primary-forest: #0d3a27;
+  --color-neutral-beige: #d2cbb8;
+  --color-neutral-light: #ebe7dc;
+  --color-accent-gold: #b39a5b;
+  --color-accent-teal: #4ab7a7;
+
+  /* Fonts */
+  --font-rubriker: 'Helvetica Neue', Arial, sans-serif;
+  --font-underrubriker: 'Open Sans', sans-serif;
+  --font-text-primary: 'Playfair Display', serif;
+  --font-text-secondary: 'Cormorant Garamond', serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-text-primary);
+  line-height: 1.6;
+}
+
+/* Ensure headings use the correct font by default */
+h1, h2, .heading-primary, .heading-secondary, .heading-company {
+  font-family: var(--font-rubriker);
+}
+
+h3, h4, h5, h6, .subheading, .subheading-small {
+  font-family: var(--font-underrubriker);
+}
+
+/* Form elements should use secondary font for labels */
+label, .form-label {
+  font-family: var(--font-underrubriker);
+}
+
+/* Make sure buttons and navigation use subheading font */
+button, .btn-primary, .btn-secondary, .btn-accent, .btn-gold {
+  font-family: var(--font-underrubriker);
+}
+
+/* Navigation and interactive elements */
+nav, .nav, nav a, nav span {
+  font-family: var(--font-underrubriker);
+}
+
+/* Table headers should use subheading font */
+th, thead th, .table-header {
+  font-family: var(--font-underrubriker);
+}
+
+/* Small helper text should use secondary font */
+.text-xs, small, .helper-text, .caption {
+  font-family: var(--font-text-secondary);
+}
+
+/* Typography Utilities */
+.font-rubriker {
+  font-family: var(--font-rubriker);
+}
+
+.font-underrubriker {
+  font-family: var(--font-underrubriker);
+}
+
+.font-text-primary {
+  font-family: var(--font-text-primary);
+}
+
+.font-text-secondary {
+  font-family: var(--font-text-secondary);
+}
+
+/* Color Utilities */
+.text-primary-dark {
+  color: var(--color-primary-dark);
+}
+
+.text-primary-darker {
+  color: var(--color-primary-darker);
+}
+
+.text-primary-forest {
+  color: var(--color-primary-forest);
+}
+
+.text-accent-gold {
+  color: var(--color-accent-gold);
+}
+
+.text-accent-teal {
+  color: var(--color-accent-teal);
+}
+
+.bg-primary-dark {
+  background-color: var(--color-primary-dark);
+}
+
+.bg-primary-darker {
+  background-color: var(--color-primary-darker);
+}
+
+.bg-primary-forest {
+  background-color: var(--color-primary-forest);
+}
+
+.bg-neutral-beige {
+  background-color: var(--color-neutral-beige);
+}
+
+.bg-neutral-light {
+  background-color: var(--color-neutral-light);
+}
+
+.bg-accent-gold {
+  background-color: var(--color-accent-gold);
+}
+
+.bg-accent-teal {
+  background-color: var(--color-accent-teal);
+}
+
+/* Custom styles following the design system */
+.warranty-step {
+  @apply mb-8 p-6 bg-neutral-light rounded-lg shadow-md border border-neutral-beige;
+}
+
+.step-header {
+  @apply text-lg font-rubriker font-semibold mb-4 text-primary-dark;
+}
+
+.form-group {
+  @apply mb-4;
+}
+
+.form-label {
+  @apply block text-xs font-underrubriker font-medium text-primary-forest mb-2;
+}
+
+.form-input {
+  @apply mt-1 block w-full px-4 py-3 border border-neutral-beige rounded-md shadow-sm bg-white
+         font-text-primary text-primary-dark placeholder-gray-500
+         focus:outline-none focus:ring-2 focus:ring-accent-teal focus:border-accent-teal
+         transition-colors duration-200 ease-in-out;
+}
+
+.btn-primary {
+  @apply inline-flex justify-center py-3 px-6 border border-transparent shadow-sm
+         text-sm font-underrubriker font-medium rounded-md text-white
+         bg-primary-dark hover:bg-primary-darker
+         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-forest
+         transition-colors duration-200 ease-in-out;
+}
+
+.btn-secondary {
+  @apply inline-flex justify-center py-3 px-6 border border-neutral-beige shadow-sm
+         text-sm font-underrubriker font-medium rounded-md text-primary-dark
+         bg-neutral-light hover:bg-neutral-beige
+         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-teal
+         transition-colors duration-200 ease-in-out;
+}
+
+.btn-accent {
+  @apply inline-flex justify-center py-3 px-6 border border-transparent shadow-sm
+         text-sm font-underrubriker font-medium rounded-md text-white
+         bg-accent-teal hover:bg-accent-teal/90
+         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-teal
+         transition-colors duration-200 ease-in-out;
+}
+
+.btn-gold {
+  @apply inline-flex justify-center py-3 px-6 border border-transparent shadow-sm
+         text-sm font-underrubriker font-medium rounded-md text-white
+         bg-accent-gold hover:bg-accent-gold/90
+         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-gold
+         transition-colors duration-200 ease-in-out;
+}
+
+/* Typography Components */
+.heading-primary {
+  @apply font-rubriker text-2xl font-bold text-primary-dark leading-tight;
+}
+
+.heading-company {
+  @apply font-rubriker text-2xl font-bold text-white leading-tight;
+}
+
+.heading-secondary {
+  @apply font-rubriker text-xl font-semibold text-primary-forest leading-tight;
+}
+
+.subheading {
+  @apply font-underrubriker text-base font-medium text-primary-dark leading-relaxed;
+}
+
+.subheading-small {
+  @apply font-underrubriker text-sm font-medium text-primary-forest leading-relaxed;
+}
+
+.body-text {
+  @apply font-text-primary text-sm text-primary-dark leading-relaxed;
+}
+
+.body-text-secondary {
+  @apply font-text-secondary text-sm text-primary-forest leading-relaxed;
+}
+
+/* Card Components */
+.card {
+  @apply bg-white border border-neutral-beige rounded-lg shadow-sm;
+}
+
+.card-header {
+  @apply p-6 border-b border-neutral-beige;
+}
+
+.card-body {
+  @apply p-6;
+}
+
+.card-footer {
+  @apply px-6 py-4 bg-neutral-beige/50 border-t border-neutral-beige rounded-b-lg;
+}
+
+/* Alert Components */
+.alert-success {
+  @apply p-4 rounded-md bg-accent-teal/10 border border-accent-teal/20 text-accent-teal;
+}
+
+.alert-warning {
+  @apply p-4 rounded-md bg-accent-gold/10 border border-accent-gold/20 text-accent-gold;
+}
+
+.alert-error {
+  @apply p-4 rounded-md bg-red-50 border border-red-200 text-red-800;
+}
+
+.alert-info {
+  @apply p-4 rounded-md bg-primary-dark/5 border border-primary-dark/10 text-primary-dark;
+}

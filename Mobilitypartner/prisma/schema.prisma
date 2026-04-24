@@ -1,0 +1,454 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  DEALER
+  DEALER_STAFF
+}
+
+enum DealerRole {
+  OWNER      // Main dealer account
+  STAFF      // Dealer staff member
+}
+
+enum Permission {
+  DASHBOARD
+  DEALERS
+  NEW_DEALER
+  PRODUCTS
+  REGISTERED_PRODUCTS
+  CLAIMS
+  FINANCE
+  SETTINGS
+}
+
+enum WarrantyStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum ClaimStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  ONGOING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+enum DealerStatus {
+  INKOMMEN    // Pending/Incoming - awaiting cooperation agreement
+  ACTIVE      // Active partner
+  INACTIVE    // Inactive/Suspended
+}
+
+model User {
+  id                   Int       @id @default(autoincrement())
+  email                String    @unique
+  passwordHash         String    @map("password_hash")
+  role                 UserRole  @default(ADMIN) // Only ADMIN users in this table
+  name                 String
+  phone                String?
+  isActive             Boolean   @default(true) @map("is_active")
+  isSuperAdmin         Boolean   @default(false) @map("is_super_admin")
+  passwordResetToken   String?   @map("password_reset_token")
+  passwordResetExpiry  DateTime? @map("password_reset_expiry")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  // Relationships
+  createdById              Int?             @map("created_by_id")
+  createdBy                User?            @relation("CreatedAdmins", fields: [createdById], references: [id])
+  createdAdmins            User[]             @relation("CreatedAdmins")
+  processedClaims          Claim[]            @relation("ProcessedBy")
+  dealerComments           DealerComment[]    @relation("AdminComments")
+  warrantyComments         WarrantyComment[]  @relation("WarrantyComments")
+  claimComments            ClaimComment[]     @relation("ClaimComments")
+  permissions              UserPermission[]
+  registeredWarranties     Warranty[]         @relation("WarrantiesRegisteredByUser")
+
+  @@map("user")
+}
+
+model Dealer {
+  id                  Int             @id @default(autoincrement())
+
+  // User/Authentication fields
+  email               String          @unique
+  passwordHash        String          @map("password_hash")
+  name                String          // Person's name (for both owner and staff)
+  phone               String?
+  role                DealerRole      @default(OWNER)
+  isActive            Boolean         @default(true) @map("is_active")
+  passwordResetToken  String?         @map("password_reset_token")
+  passwordResetExpiry DateTime?       @map("password_reset_expiry")
+
+  // Company fields (only for OWNER role, null for STAFF)
+  companyName         String?         @map("company_name")
+  orgNumber           String?         @map("org_number")
+  address             String?
+  postalCode          String?         @map("postal_code")
+  city                String?
+  county              String?
+  contactPerson       String?         @map("contact_person")
+  status              DealerStatus?   @default(INKOMMEN)
+  credentialsSentAt   DateTime?       @map("credentials_sent_at")
+
+  createdAt           DateTime        @default(now()) @map("created_at")
+  updatedAt           DateTime        @updatedAt @map("updated_at")
+
+  // Relationships
+  ownerId              Int?                       @map("owner_id")
+  owner                OwnerApiCache?             @relation(fields: [ownerId], references: [id])
+
+  // Self-referential relationship for staff members
+  dealerId             Int?                       @map("dealer_id") // null for OWNER, set for STAFF
+  parentDealer         Dealer?                    @relation("DealerStaff", fields: [dealerId], references: [id], onDelete: Cascade)
+  staff                Dealer[]                   @relation("DealerStaff") // Staff members under this dealer
+
+  // Warranties relationship (for OWNER role)
+  warranties           Warranty[]                 @relation("DealerWarranties")
+
+  // Registered warranties (for both OWNER and STAFF)
+  registeredWarranties Warranty[]                 @relation("WarrantiesRegisteredByDealer")
+
+  // Other relationships (only for OWNER role)
+  comments             DealerComment[]
+  invoices             Invoice[]
+  fortnoxCustomer      FortnoxCustomerMapping?
+
+  @@unique([orgNumber]) // Unique constraint but allows nulls
+  @@map("dealer")
+}
+
+model Product {
+  id             Int       @id @default(autoincrement())
+  name           String
+  description    String?
+  premium         Decimal   @db.Decimal(10, 2)
+  insuranceAmount Decimal   @default(0) @map("insurance_amount") @db.Decimal(10, 2)
+  durationMonths  Int       @map("duration_months")
+  vehicleType    String    @map("vehicle_type")
+  maxAge         Int       @map("max_age")
+  maxKm          Int       @map("max_km")
+  maxHk          Int       @map("max_hk")
+  pdfUrl         String?   @map("pdf_url")
+  priority       Int       @default(1) // Lower number = higher priority (1 = highest)
+  isActive       Boolean   @default(true) @map("is_active")
+  isPublished    Boolean   @default(false) @map("is_published")
+  isDeleted      Boolean   @default(false) @map("is_deleted")
+  deletedAt      DateTime? @map("deleted_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  // Relationships
+  warranties Warranty[]
+
+  @@map("product")
+}
+
+model Warranty {
+  id                        Int            @id @default(autoincrement())
+  warrantyNumber            String         @unique @map("warranty_number") // Unique warranty reference number (e.g., WRN-202601-0001)
+  vehicleRegistrationNumber String         @map("vehicle_registration_number")
+  vehicleData               Json           @map("vehicle_data") // JSON object with make, model, year, mileage, vin
+  ownerName                 String         @map("owner_name")
+  ownerFirstname            String?        @map("owner_firstname")
+  ownerLastname             String?        @map("owner_lastname")
+  ownerEmail                String         @map("owner_email")
+  ownerPhone                String         @map("owner_phone")
+  ownerPersonnummer         String         @map("owner_personnummer")
+  ownerAddress              String?        @map("owner_address")
+  ownerPostnummer           String?        @map("owner_postnummer")
+  ownerOrt                  String?        @map("owner_ort")
+  startDate                 DateTime       @map("start_date")
+  endDate                   DateTime       @map("end_date")
+  status                    WarrantyStatus @default(ACTIVE)
+  comment                   String?        @map("comment") // Admin comment field
+  isDeleted                 Boolean        @default(false) @map("is_deleted")
+  deletedAt                 DateTime?      @map("deleted_at")
+  createdAt                 DateTime       @default(now()) @map("created_at")
+
+  // Track who registered the warranty
+  registeredByType          String?        @map("registered_by_type") // 'USER' or 'DEALER'
+  registeredByUserId        Int?           @map("registered_by_user_id") // If registered by admin
+  registeredByDealerId      Int?           @map("registered_by_dealer_id") // If registered by dealer (owner or staff)
+  registeredByName          String?        @map("registered_by_name") // Cache the name for easy display
+  registeredByEmail         String?        @map("registered_by_email") // Cache the email
+
+  // Relationships
+  dealerId              Int          @map("dealer_id")
+  dealer                Dealer       @relation("DealerWarranties", fields: [dealerId], references: [id])
+  productId             Int          @map("product_id")
+  product               Product      @relation(fields: [productId], references: [id])
+
+  // RegisteredBy relationships (optional foreign keys)
+  registeredByUser      User?        @relation("WarrantiesRegisteredByUser", fields: [registeredByUserId], references: [id], onDelete: SetNull)
+  registeredByDealer    Dealer?      @relation("WarrantiesRegisteredByDealer", fields: [registeredByDealerId], references: [id], onDelete: SetNull)
+
+  claims                Claim[]
+  invoices              Invoice[]
+  comments              WarrantyComment[]
+
+  @@map("warranty")
+}
+
+model Claim {
+  id                   Int         @id @default(autoincrement())
+  customerDescription  String?     @map("customer_description")
+  internalNotes        String?     @map("internal_notes")
+  status               ClaimStatus @default(SUBMITTED)
+  workshopInvoiceUrl   String?     @map("workshop_invoice_url")
+  costAmount           Decimal?    @map("cost_amount") @db.Decimal(10, 2)
+
+  // Customer contact information at time of claim
+  customerFirstname    String      @map("customer_firstname")
+  customerLastname     String      @map("customer_lastname")
+  customerPhone        String      @map("customer_phone")
+  customerEmail        String      @map("customer_email")
+  customerPersonnummer String      @map("customer_personnummer")
+  customerAddress      String?     @map("customer_address")
+  customerPostnummer   String      @map("customer_postnummer")
+  customerOrt          String      @map("customer_ort")
+
+  // Vehicle information at time of claim
+  mileage              String?
+  skadedatum           DateTime    @map("skadedatum")
+
+  // File attachments
+  meterReadingImage    String?     @map("meter_reading_image")
+  descriptionFiles     String?     @map("description_files") // JSON array of file paths
+
+  createdAt            DateTime    @default(now()) @map("created_at")
+  updatedAt            DateTime    @updatedAt @map("updated_at")
+
+  // Relationships
+  warrantyId    Int  @map("warranty_id")
+  warranty      Warranty @relation(fields: [warrantyId], references: [id])
+  processedById Int? @map("processed_by_id")
+  processedBy   User? @relation("ProcessedBy", fields: [processedById], references: [id])
+  comments      ClaimComment[]
+
+  @@map("claim")
+}
+
+model DealerComment {
+  id        Int      @id @default(autoincrement())
+  comment   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relationships
+  dealerId Int    @map("dealer_id")
+  dealer   Dealer @relation(fields: [dealerId], references: [id])
+  adminId  Int    @map("admin_id")
+  admin    User   @relation("AdminComments", fields: [adminId], references: [id])
+
+  @@map("dealer_comment")
+}
+
+model Invoice {
+  id                Int      @id @default(autoincrement())
+  invoiceNumber     String   @unique @map("invoice_number")
+  fortnoxId         String?  @map("fortnox_id") // Fortnox integration ID
+  amount            Decimal  @db.Decimal(10, 2)
+  vatAmount         Decimal  @db.Decimal(10, 2) @map("vat_amount")
+  totalAmount       Decimal  @db.Decimal(10, 2) @map("total_amount")
+  dueDate           DateTime @map("due_date")
+  status            InvoiceStatus @default(PENDING)
+  fortnoxStatus     String?  @map("fortnox_status")
+  sentAt            DateTime? @map("sent_at")
+  paidAt            DateTime? @map("paid_at")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  dealerId    Int       @map("dealer_id")
+  dealer      Dealer    @relation(fields: [dealerId], references: [id])
+  warrantyId  Int       @map("warranty_id")
+  warranty    Warranty  @relation(fields: [warrantyId], references: [id])
+
+  @@map("invoice")
+}
+
+model VehicleApiCache {
+  id                 Int      @id @default(autoincrement())
+  registrationNumber String   @unique @map("registration_number")
+  vin                String?
+  make               String?
+  model              String?
+  status             String?
+  vehicleType        String?  @map("vehicle_type")
+  color              String?
+  modelYear          Int?     @map("model_year")
+  vehicleYear        Int?     @map("vehicle_year")
+  transmission       String?
+  fuelType           String?  @map("fuel_type")
+  power              Int?
+  powerHp            Int?     @map("power_hp")
+  co2                Int?
+  emissionClass      String?  @map("emission_class")
+  ecoClass           String?  @map("eco_class")
+  inspection         String?
+  inspectionValidUntil DateTime? @map("inspection_valid_until")
+  lastFetched        DateTime @map("last_fetched")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  // Owner relationship for normalization
+  ownerId            Int?     @map("owner_id")
+  owner              OwnerApiCache? @relation(fields: [ownerId], references: [id])
+
+  @@map("vehicle_api_cache")
+}
+
+model SystemSettings {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("system_settings")
+}
+
+model FortnoxSettings {
+  id            Int      @id @default(autoincrement())
+  clientId      String   @map("client_id")
+  clientSecret  String   @map("client_secret")
+  redirectUri   String   @map("redirect_uri")
+  accessToken   String?  @map("access_token")
+  refreshToken  String?  @map("refresh_token")
+  tokenExpiry   DateTime? @map("token_expiry")
+  scopes        String   @default("invoice customer order article") // Space-separated scopes
+  isActive      Boolean  @default(false) @map("is_active")
+  lastSyncAt    DateTime? @map("last_sync_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("fortnox_settings")
+}
+
+model FortnoxCustomerMapping {
+  id                Int      @id @default(autoincrement())
+  dealerId          Int      @unique @map("dealer_id")
+  fortnoxCustomerId String   @map("fortnox_customer_id") // Fortnox customer number
+  lastSyncAt        DateTime @map("last_sync_at")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  // Relationships
+  dealer            Dealer   @relation(fields: [dealerId], references: [id])
+
+  @@map("fortnox_customer_mapping")
+}
+
+enum InvoiceStatus {
+  PENDING
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PhoneType {
+  Landline
+  Mobile
+}
+
+model OwnerApiCache {
+  id              Int       @id @default(autoincrement())
+  idnr            String    @unique // Organization number
+  status          String?
+  name            String?
+  givenName       String?   @map("given_name")
+  address         String?
+  co              String?
+  postCode        String?   @map("post_code")
+  city            String?
+  sni             Json?     // Array of strings
+  municipality    String?
+  municipalityCode String?  @map("municipality_code")
+  county          String?
+  countyCode      String?   @map("county_code")
+  phone           Json?     // Array of phone objects
+  nix             Boolean?
+  nixDate         DateTime? @map("nix_date")
+  protected       Boolean?
+  legalForm       String?   @map("legal_form")
+  lastFetched     DateTime  @map("last_fetched")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  // Relationships
+  vehicles        VehicleApiCache[]
+  dealers         Dealer[]
+
+  @@map("owner_api_cache")
+}
+
+model UserPermission {
+  id         Int        @id @default(autoincrement())
+  userId     Int        @map("user_id")
+  permission Permission
+  createdAt  DateTime   @default(now()) @map("created_at")
+
+  // Relationships
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, permission])
+  @@map("user_permission")
+}
+
+model WarrantyComment {
+  id         Int      @id @default(autoincrement())
+  comment    String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relationships
+  warrantyId Int      @map("warranty_id")
+  warranty   Warranty @relation(fields: [warrantyId], references: [id], onDelete: Cascade)
+  adminId    Int      @map("admin_id")
+  admin      User     @relation("WarrantyComments", fields: [adminId], references: [id])
+
+  @@map("warranty_comment")
+}
+
+model ClaimComment {
+  id        Int      @id @default(autoincrement())
+  comment   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relationships
+  claimId   Int      @map("claim_id")
+  claim     Claim    @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  adminId   Int      @map("admin_id")
+  admin     User     @relation("ClaimComments", fields: [adminId], references: [id])
+
+  @@map("claim_comment")
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  action      String   // CREATE, UPDATE, DELETE
+  entity      String   // product, warranty, dealer, claim, invoice, user, etc.
+  entityId    String   @map("entity_id") // ID of the affected record
+  userId      Int?     @map("user_id")   // Who made the change
+  userName    String?  @map("user_name") // Snapshot of user name
+  userEmail   String?  @map("user_email") // Snapshot of user email
+  before      Json?    // Previous values (null for CREATE)
+  after       Json?    // New values (null for DELETE)
+  ipAddress   String?  @map("ip_address")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([entity, entityId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("audit_log")
+}

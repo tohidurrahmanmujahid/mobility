@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn migration:generate:*)",
+      "Bash(yarn add:*)",
+      "Bash(npm install:*)",
+      "Bash(git checkout:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(if exist \"D:\\\\works\\\\Upwork\\\\Azaz\\\\Mobilitypartner\\\\prisma\\\\migrations\\\\manual_add_warranty_number.sql\" del \"D:\\\\works\\\\Upwork\\\\Azaz\\\\Mobilitypartner\\\\prisma\\\\migrations\\\\manual_add_warranty_number.sql\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
