@@ -4,6 +4,7 @@ import { Phone, QrCode } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import heroOcean from "@/assets/pictureocean.jpg";
+import EditableText from "@/components/EditableText";
 
 const Kundservice = () => {
   return (
@@ -32,13 +33,27 @@ const Kundservice = () => {
           <Card className="max-w-4xl mx-auto p-12 bg-card">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <h2 className="text-3xl font-bold mb-4">Ladda ner vår app</h2>
-                <p className="text-lg mb-4">
-                  Få tillgång till ditt bilägande i vår applikation
-                </p>
-                <p className="text-muted-foreground">
-                  Tillgänglig både till iOS och Android
-                </p>
+                <EditableText
+                  fieldKey="page.kundservice.app.title"
+                  defaultValue="Ladda ner vår app"
+                  tag="h2"
+                  multiline={false}
+                  className="text-3xl font-bold mb-4"
+                />
+                <EditableText
+                  fieldKey="page.kundservice.app.description"
+                  defaultValue="Få tillgång till ditt bilägande i vår applikation"
+                  tag="p"
+                  multiline={false}
+                  className="text-lg mb-4"
+                />
+                <EditableText
+                  fieldKey="page.kundservice.app.subtitle"
+                  defaultValue="Tillgänglig både till iOS och Android"
+                  tag="p"
+                  multiline={false}
+                  className="text-muted-foreground"
+                />
               </div>
               <div className="flex justify-center">
                 <div className="w-48 h-48 bg-primary rounded-3xl flex items-center justify-center">

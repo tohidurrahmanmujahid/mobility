@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import heroOcean from "@/assets/pictureocean.jpg";
 import cars from "@/assets/picturecars.jpg";
 import carAutumn from "@/assets/picture4.jpg";
+import EditableText from "@/components/EditableText";
 
 import carRoad from "@/assets/picutrecars.jpg";
 
@@ -30,58 +31,80 @@ interface ApiResponse {
   count: number;
   products: Product[];
 }
-const processSteps = [
+
+const defaultFaqItems = [
   {
     number: 1,
-    title: 'Vilka är Mobilitypartner och vad erbjuder ni?',
-    description: 'Mobilitypartner är experter på bilgarantier och skadehantering, med fokus på snabb, personlig service där kunden alltid står i centrum. Vi gör bilägandet tryggt genom att hantera skador smidigt och effektivt, från anmälan till färdig reparation. Vårt mål är att du som kund ska känna dig säker och omhändertagen i varje steg av processen.',
+    titleKey: 'page.faq.1.question',
+    descKey: 'page.faq.1.answer',
+    defaultTitle: 'Vilka är Mobilitypartner och vad erbjuder ni?',
+    defaultDesc: 'Mobilitypartner är experter på bilgarantier och skadehantering, med fokus på snabb, personlig service där kunden alltid står i centrum. Vi gör bilägandet tryggt genom att hantera skador smidigt och effektivt, från anmälan till färdig reparation. Vårt mål är att du som kund ska känna dig säker och omhändertagen i varje steg av processen.',
   },
   {
     number: 2,
-    title: 'Vilka typer av fordon omfattas av era tjänster?',
-    description: 'Våra garantier täcker både nya och begagnade personbilar oavsett märke eller modell. Vi erbjuder flexibla lösningar som passar både privatkunder och bilhandlare, alltid med samma höga krav på kvalitet och trygghet.',
+    titleKey: 'page.faq.2.question',
+    descKey: 'page.faq.2.answer',
+    defaultTitle: 'Vilka typer av fordon omfattas av era tjänster?',
+    defaultDesc: 'Våra garantier täcker både nya och begagnade personbilar oavsett märke eller modell.Vi erbjuder flexibla lösningar som passar både privatkunder och bilhandlare, alltid med samma höga krav på kvalitet och trygghet.',
   },
   {
     number: 3,
-    title: 'Hur fungerar skadeanmälan och reparation?',
-    description: 'När en skada uppstår fyller verkstaden i vårt skadeformulär, där ansvarig handläggare anges. Verkstaden genomför sedan en diagnos och uppskattar skadans omfattning. Vi granskar informationen och meddelar om vi godkänner reparationen. Därefter kan verkstaden påbörja arbetet, och vi följer upp tills ärendet är avslutat.',
+    titleKey: 'page.faq.3.question',
+    descKey: 'page.faq.3.answer',
+    defaultTitle: 'Hur fungerar skadeanmälan och reparation?',
+    defaultDesc: 'När en skada uppstår fyller verkstaden i vårt skadeformulär, där ansvarig handläggare anges. Verkstaden genomför sedan en diagnos och uppskattar skadans omfattning. Vi granskar informationen och meddelar om vi godkänner reparationen. Därefter kan verkstaden påbörja arbetet, och vi följer upp tills ärendet är avslutat.',
   },
   {
     number: 4,
-    title: 'Vilka verkstäder samarbetar ni med?',
-    description: 'Vi samarbetar med ett nätverk av certifierade verkstäder som uppfyller våra höga kvalitetskrav. Alla verkstäder är noggrant utvalda för att säkerställa professionell service, korrekt hantering av skador och hög kundnöjdhet.',
+    titleKey: 'page.faq.4.question',
+    descKey: 'page.faq.4.answer',
+    defaultTitle: 'Vilka verkstäder samarbetar ni med?',
+    defaultDesc: 'Vi samarbetar med ett nätverk av certifierade verkstäder som uppfyller våra höga kvalitetskrav. Alla verkstäder är noggrant utvalda för att säkerställa professionell service, korrekt hantering av skador och hög kundnöjdhet.',
   },
   {
     number: 5,
-    title: 'Hur lång tid tar handläggningen av ett ärende?',
-    description: 'Handläggningstiden varierar beroende på skadans omfattning och dokumentationens fullständighet. Vårt mål är alltid att ge snabba och tydliga besked för att minimera väntetiden för våra kunder.',
+    titleKey: 'page.faq.5.question',
+    descKey: 'page.faq.5.answer',
+    defaultTitle: 'Hur lång tid tar handläggningen av ett ärende?',
+    defaultDesc: 'Handläggningstiden varierar beroende på skadans omfattning och dokumentationens fullständighet.Vårt mål är alltid att ge snabba och tydliga besked för att minimera väntetiden för våra kunder.',
   },
   {
     number: 6,
-    title: 'Vad ingår i garantin?',
-    description: 'Våra garantipaket omfattar bland annat mekaniska fel, elektroniska system och vissa skador som kan uppstå under normal användning. Detaljerna i garantin varierar beroende på fordonstyp och val av garantitid. Våra kunder får alltid tydlig information om vad som ingår och vilka begränsningar som gäller. Vid frågor är det bara att kontakta kundtjänst.',
+    titleKey: 'page.faq.6.question',
+    descKey: 'page.faq.6.answer',
+    defaultTitle: 'Vad ingår i garantin?',
+    defaultDesc: 'Våra garantipaket omfattar bland annat mekaniska fel, elektroniska system och vissa skador som kan uppstå under normal användning. Detaljerna i garantin varierar beroende på fordonstyp och val av garantitid. Våra kunder får alltid tydlig information om vad som ingår och vilka begränsningar som gäller. Vid frågor är det bara att kontakta kundtjänst.',
   },
   {
     number: 7,
-    title: 'Hur går processen till från skada till godkänd reparation?',
-    description: 'Efter att verkstaden gjort en fullständig diagnos och kostnadsuppskattning skickas informationen till oss. Vi granskar ärendet, bedömer om reparationen omfattas av garantin och ger besked direkt. När reparationen godkänns kan verkstaden påbörja arbetet, och vi följer upp tills bilen är reparerad och ärendet avslutat.',
+    titleKey: 'page.faq.7.question',
+    descKey: 'page.faq.7.answer',
+    defaultTitle: 'Hur går processen till från skada till godkänd reparation?',
+    defaultDesc: 'Efter att verkstaden gjort en fullständig diagnos och kostnadsuppskattning skickas informationen till oss. Vi granskar ärendet, bedömer om reparationen omfattas av garantin och ger besked direkt. När reparationen godkänns kan verkstaden påbörja arbetet, och vi följer upp tills bilen är reparerad och ärendet avslutat.',
   },
   {
     number: 8,
-    title: 'Vad händer om en skada inte omfattas av garantin?',
-    description: 'Om skadan inte täcks av garantin informerar vi tydligt om detta och ger råd om alternativa lösningar. Vi hjälper alltid kunden att hitta den mest kostnadseffektiva och trygga vägen framåt.',
+    titleKey: 'page.faq.8.question',
+    descKey: 'page.faq.8.answer',
+    defaultTitle: 'Vad händer om en skada inte omfattas av garantin?',
+    defaultDesc: 'Om skadan inte täcks av garantin informerar vi tydligt om detta och ger råd om alternativa lösningar.Vi hjälper alltid kunden att hitta den mest kostnadseffektiva och trygga vägen framåt.',
   },
   {
     number: 9,
-    title: 'Hur kontaktar jag er kundsupport vid frågor eller ärenden?',
-    description: 'Vår kundsupport nås via telefon, e-post eller vårt onlineformulär. Vi erbjuder personlig service för både kunder och samarbetspartners och säkerställer att varje fråga besvaras snabbt och korrekt. Kontaktuppgifter finns alltid tydligt tillgängliga på vår hemsida.',
+    titleKey: 'page.faq.9.question',
+    descKey: 'page.faq.9.answer',
+    defaultTitle: 'Hur kontaktar jag er kundsupport vid frågor eller ärenden?',
+    defaultDesc: 'Vår kundsupport nås via telefon, e-post eller vårt onlineformulär. Vi erbjuder personlig service för både kunder och samarbetspartners och säkerställer att varje fråga besvaras snabbt och korrekt. Kontaktuppgifter finns alltid tydligt tillgängliga på vår hemsida.',
   },
   {
     number: 10,
-    title: 'Varför ska jag välja MobilityPartner?',
-    description: 'Vi kombinerar djup branschkunskap med snabb och personlig service, alltid med kundens trygghet i fokus. Våra garantier och effektiva skadehantering gör bilägandet enkelt och problemfritt, så att du kan känna dig säker i varje steg av processen.',
+    titleKey: 'page.faq.10.question',
+    descKey: 'page.faq.10.answer',
+    defaultTitle: 'Varför ska jag välja MobilityPartner?',
+    defaultDesc: 'Vi kombinerar djup branschkunskap med snabb och personlig service, alltid med kundens trygghet i fokus. Våra garantier och effektiva skadehantering gör bilägandet enkelt och problemfritt, så att du kan känna dig säker i varje steg av processen.',
   },
 ];
+
 const Produkter = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -129,18 +152,26 @@ const Produkter = () => {
       >
         <div className="absolute inset-0 bg-primary/40"></div>
         <div className="relative z-10 container  px-4">
-          <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-4">
-            Våra garantier
-          </h1>
-          <h2 className="text-2xl text-primary-foreground max-w-3xl">
-            Trygghet även när bilen är begagnad
-          </h2>
-          <p className="text-lg text-primary-foreground max-w-3xl mt-6">
-            Vid köp av en begagnad bil kan oväntade kostnader för reparationer ställa till med problem. Med en
-            begagnatgaranti säkerställer du att du och kund tillsammans kan vara trygga av kostnaderna och försäkringsskydd. Garantin omfattar
-            plötsliga och oförutsedda fel på både mekaniska och elektriska komponenter och bidrar därmed till att minimera
-            kostnaden för oförutsedda reparationer.
-          </p>
+          <EditableText
+            fieldKey="page.produkter.hero.title"
+            defaultValue="Våra garantier"
+            tag="h1"
+            multiline={false}
+            className="text-4xl md:text-6xl font-bold text-primary-foreground mb-4"
+          />
+          <EditableText
+            fieldKey="page.produkter.hero.subtitle"
+            defaultValue="Trygghet även när bilen är begagnad"
+            tag="h2"
+            multiline={false}
+            className="text-2xl text-primary-foreground max-w-3xl"
+          />
+          <EditableText
+            fieldKey="page.produkter.hero.description"
+            defaultValue="Vid köp av en begagnad bil kan oväntade kostnader för reparationer ställa till med problem. Med en begagnatgaranti säkerställer du att du och kund tillsammans kan vara trygga av kostnaderna och försäkringsskydd. Garantin omfattar plötsliga och oförutsedda fel på både mekaniska och elektriska komponenter och bidrar därmed till att minimera kostnaden för oförutsedda reparationer."
+            tag="p"
+            className="text-lg text-primary-foreground max-w-3xl mt-6"
+          />
         </div>
       </section>
       <section className="bg-secondary  min-h-[600px]">
@@ -151,9 +182,12 @@ const Produkter = () => {
           ></div>
           <div className="flex items-center justify-center p-12">
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-forest-foreground mb-8">
-                En begagnatgaranti är en investering i både trygghet och långsiktig hållbarhet, för ett bilägande som är lika bekymmersfritt som ansvarsfullt.
-              </h2>
+              <EditableText
+                fieldKey="page.produkter.investment.title"
+                defaultValue="En begagnatgaranti är en investering i både trygghet och långsiktig hållbarhet, för ett bilägande som är lika bekymmersfritt som ansvarsfullt."
+                tag="h2"
+                className="text-3xl font-bold text-forest-foreground mb-8"
+              />
             </div>
           </div>
         </div>
@@ -162,13 +196,19 @@ const Produkter = () => {
       {/* Warranty Tiers */}
       <section className="py-16 bg-primary">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-primary-foreground mb-4">
-            Garantier för personbilar
-          </h2>
-          <p className="text-center text-primary-foreground mb-12 text-2xl">
-            Hos oss kan du teckna garantier på bilar upp till 20 år gamla eller med en mätarställning på upp till 30 000km.
-            Läs mer om våra produkter nedan, du kan även ladda ner produktinformationen för respektive garanti.
-          </p>
+          <EditableText
+            fieldKey="page.produkter.products.title"
+            defaultValue="Garantier för personbilar"
+            tag="h2"
+            multiline={false}
+            className="text-3xl font-bold text-center text-primary-foreground mb-4"
+          />
+          <EditableText
+            fieldKey="page.produkter.products.description"
+            defaultValue="Hos oss kan du teckna garantier på bilar upp till 20 år gamla eller med en mätarställning på upp till 30 000km. Läs mer om våra produkter nedan, du kan även ladda ner produktinformationen för respektive garanti."
+            tag="p"
+            className="text-center text-primary-foreground mb-12 text-2xl"
+          />
 
           {error && (
             <div className="max-w-6xl mx-auto mb-6">
@@ -264,7 +304,7 @@ const Produkter = () => {
             <h1 className="text-4xl font-bold mb-4">FAQ</h1>
 
             <div className="space-y-6">
-              {processSteps.map((step) => (
+              {defaultFaqItems.map((step) => (
                 <Card key={step.number} className="bg-teal-800/90 border-teal-700 text-white backdrop-blur-sm hover:bg-teal-800 transition-colors"
                   onClick={() => setExpandedStep(expandedStep === step.number ? null : step.number)}
                 >
@@ -277,7 +317,13 @@ const Produkter = () => {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-xl font-semibold">{step.title}</h3>
+                          <EditableText
+                            fieldKey={step.titleKey}
+                            defaultValue={step.defaultTitle}
+                            tag="h3"
+                            multiline={false}
+                            className="text-xl font-semibold"
+                          />
                           <ChevronDown
                             className={`w-6 h-6 transition-transform duration-300 ${expandedStep === step.number ? 'rotate-180' : ''
                               }`}
@@ -290,7 +336,12 @@ const Produkter = () => {
                           }}
                         >
                           <div className="overflow-hidden">
-                            <p className="text-teal-100 text-sm leading-relaxed mt-2">{step.description}</p>
+                            <EditableText
+                              fieldKey={step.descKey}
+                              defaultValue={step.defaultDesc}
+                              tag="p"
+                              className="text-teal-100 text-sm leading-relaxed mt-2"
+                            />
                           </div>
                         </div>
                       </div>
@@ -311,13 +362,17 @@ const Produkter = () => {
               style={{ backgroundImage: `url(${carRoad})` }}
             ></div>
             <div>
-              <p className="mb-4">
-                <strong>Tecknande av garanti görs hos bilhandlaren vid köp av fordon.</strong> Garantibeviset skickas till dig vid köpet.
-                Därför är det viktigt att bilhandlaren har rätt kontaktuppgifter till dig.
-              </p>
-              <p>
-                Har du frågor är det bara att höra av dig till antingen bilhandlaren eller oss.
-              </p>
+              <EditableText
+                fieldKey="page.produkter.purchase.text1"
+                defaultValue="Tecknande av garanti görs hos bilhandlaren vid köp av fordon. Garantibeviset skickas till dig vid köpet. Därför är det viktigt att bilhandlaren har rätt kontaktuppgifter till dig."
+                tag="p"
+                className="mb-4"
+              />
+              <EditableText
+                fieldKey="page.produkter.purchase.text2"
+                defaultValue="Har du frågor är det bara att höra av dig till antingen bilhandlaren eller oss."
+                tag="p"
+              />
             </div>
           </div>
         </div>

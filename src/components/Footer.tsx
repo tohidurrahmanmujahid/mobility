@@ -1,5 +1,6 @@
 import { Phone, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
+import EditableText from "@/components/EditableText";
 
 const Footer = () => {
   return (
@@ -29,25 +30,60 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h3 className="font-bold text-foreground mb-4">KONTAKT</h3>
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <p>Mobilitypartner Norden AB</p>
-              <p>Trollhättevägen 20</p>
-              <p>442 34 Kungälv</p>
-              {/* <p>Göteborg</p> */}
+            <div className="space-y-1 text-sm text-muted-foreground">
+              <EditableText
+                fieldKey="page.footer.contact.company"
+                defaultValue="Mobilitypartner Norden AB"
+                tag="p"
+                multiline={false}
+                className="text-sm text-muted-foreground"
+              />
+              <EditableText
+                fieldKey="page.footer.contact.address1"
+                defaultValue="Trollhättevägen 20"
+                tag="p"
+                multiline={false}
+                className="text-sm text-muted-foreground"
+              />
+              <EditableText
+                fieldKey="page.footer.contact.address2"
+                defaultValue="442 34 Kungälv"
+                tag="p"
+                multiline={false}
+                className="text-sm text-muted-foreground"
+              />
             </div>
           </div>
 
           {/* Org Number & Contact */}
           <div>
             <h3 className="font-bold text-foreground mb-4">ORG.NUMMER</h3>
-            <p className="text-sm text-muted-foreground mb-4">559541-2312</p>
-            
+            <EditableText
+              fieldKey="page.footer.org.number"
+              defaultValue="559541-2312"
+              tag="p"
+              multiline={false}
+              className="text-sm text-muted-foreground mb-4"
+            />
+
             <div className="flex items-center gap-2 text-sm text-foreground mb-2">
               <Phone size={16} />
-              <span className="font-semibold">010-189 89 99</span>
+              <EditableText
+                fieldKey="page.footer.org.phone"
+                defaultValue="010-189 89 99"
+                tag="span"
+                multiline={false}
+                className="font-semibold"
+              />
             </div>
-            <p className="text-xs text-muted-foreground mb-4">Mån - tre 10.00 -16.00</p>
-            
+            <EditableText
+              fieldKey="page.footer.org.hours"
+              defaultValue="Mån - tre 10.00 -16.00"
+              tag="p"
+              multiline={false}
+              className="text-xs text-muted-foreground mb-4"
+            />
+
             <div className="flex items-center gap-2 text-sm text-foreground">
               <Mail size={16} />
               <span>support@mobilitypartner.se</span>

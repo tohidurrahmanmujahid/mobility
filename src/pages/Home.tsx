@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ArrowRight, Badge, QrCode } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -11,10 +10,14 @@ import carAutumn from "@/assets/picturecars.jpg";
 import carRoad from "@/assets/car-road.jpg";
 import GjensidigeHero from "@/components/Gjensidigehero";
 import ocean from "@/assets/picocean2.jpg";
-import gjensidigehero  from "@/assets/gjensidige-dark.png";
-import carfix  from "@/assets/carfix.jpg";
+import gjensidigehero from "@/assets/gjensidige-dark.png";
+import carfix from "@/assets/carfix.jpg";
+import EditableText from "@/components/EditableText";
+import { useAdmin } from "@/context/AdminContext";
 
 const Home = () => {
+  const { pageContent } = useAdmin();
+
   const partners = [
     { name: "Samrander", image: carRoad },
     { name: "Blacket", image: carRoad },
@@ -38,14 +41,21 @@ const Home = () => {
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 w-full">
           <div className="max-w-2xl">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              Välkommen till
-              din mobilitetspartner
-            </h1>
+            <EditableText
+              fieldKey="page.home.hero.title"
+              defaultValue="Välkommen till din mobilitetspartner"
+              tag="h1"
+              multiline={false}
+              className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
+            />
 
-            <p className="text-lg text-gray-200 mb-12 leading-relaxed">
-              Vi skapar smarta, hållbara och flexibla lösningar för framtidens resor.
-            </p>
+            <EditableText
+              fieldKey="page.home.hero.subtitle"
+              defaultValue="Vi skapar smarta, hållbara och flexibla lösningar för framtidens resor."
+              tag="p"
+              multiline={false}
+              className="text-lg text-gray-200 mb-12 leading-relaxed"
+            />
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-8">
@@ -54,11 +64,9 @@ const Home = () => {
                 <Button
                   size="lg"
                   variant="outline"
-
                   className="bg-[#d2cbb8] text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
                 >
                   <Link to="/produkter">VÅRA GARANTIER</Link>
-
                 </Button>
               </div>
 
@@ -72,7 +80,6 @@ const Home = () => {
                   >
                     <Link to="/Skadeanmalan">SKADEANMÄLAN</Link>
                   </Button>
-
                 </div>
               </div>
             </div>
@@ -83,83 +90,50 @@ const Home = () => {
       {/* Safety Message */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Köp begagnat med samma trygghet som nytt!</h2>
-          <p className="text-muted-foreground max-w-3xl mx-auto">
-            Med våra garantier slipper du oron för oväntade kostnader, vi täcker plötsligt och oförutsedda
-            fel på både elektriska och mekaniska komponenter. Kör vidare med full kontroll, trygghet och
-            frihet på vägen.
-          </p>
+          <EditableText
+            fieldKey="page.home.safety.title"
+            defaultValue="Köp begagnat med samma trygghet som nytt!"
+            tag="h2"
+            multiline={false}
+            className="text-3xl font-bold mb-6"
+          />
+          <EditableText
+            fieldKey="page.home.safety.body"
+            defaultValue="Med våra garantier slipper du oron för oväntade kostnader, vi täcker plötsligt och oförutsedda fel på både elektriska och mekaniska komponenter. Kör vidare med full kontroll, trygghet och frihet på vägen."
+            tag="p"
+            className="text-muted-foreground max-w-3xl mx-auto"
+          />
         </div>
       </section>
+
       <section className="relative min-h-[500px] bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 py-20">
           <div className="grid lg:grid-cols-1 gap-12 items-center">
             {/* Left Content */}
             <div className="space-y-8">
-
               <div className="space-y-4">
-                <h1 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
-                  Mobilitypartner
-                </h1>
+                <EditableText
+                  fieldKey="page.home.about.title"
+                  defaultValue="Mobilitypartner"
+                  tag="h1"
+                  multiline={false}
+                  className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight"
+                />
+                <EditableText
+                  fieldKey="page.home.about.body"
+                  defaultValue="Vi erbjuder bilägare ett tryggare och mer bekymmersfritt bilköp. Hos utvalda fordons­handlare kan du idag få en omfattande begagnatgaranti som skyddar dig mot oväntade kostnader om något skulle hända med bilen efter köpet.
 
-                <p className="text-lg text-gray-600 leading-relaxed w-full">
-                  Vi erbjuder bilägare ett tryggare och mer bekymmersfritt bilköp. Hos utvalda fordons­handlare kan du idag få en omfattande begagnatgaranti som skyddar dig mot oväntade kostnader om något skulle hända med bilen efter köpet.
+En garanti ger dig extra trygghet och visar att bilen är noggrant kontrollerad och i gott skick vid leverans. Skulle något mot förmodan gå fel, slipper du oroa dig för dyra reparationer, garantin täcker många av de viktigaste komponenterna i bilen.
 
-                  En garanti ger dig extra trygghet och visar att bilen är noggrant kontrollerad och i gott skick vid leverans. Skulle något mot förmodan gå fel, slipper du oroa dig för dyra reparationer, garantin täcker många av de viktigaste komponenterna i bilen.
-
-                  Att köpa en begagnad bil med garanti är därför inte bara en säkerhetsåtgärd, utan också en kvalitetsstämpel som gör ditt bilägande enklare, tryggare och mer förutsägbart.</p>
+Att köpa en begagnad bil med garanti är därför inte bara en säkerhetsåtgärd, utan också en kvalitetsstämpel som gör ditt bilägande enklare, tryggare och mer förutsägbart."
+                  tag="p"
+                  className="text-lg text-gray-600 leading-relaxed w-full"
+                />
               </div>
-
-              {/* <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 rounded-lg group"
-                >
-                  What's new with Dash
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white font-semibold px-8 rounded-lg"
-                >
-                  Try Dropbox free →
-                </Button>
-              </div> */}
             </div>
-
-            {/* Right Product Mockup */}
-            {/* <div className="relative lg:block hidden">
-              <Card className="p-8 flex items-center justify-center bg-card">
-                <div className="text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 bg-primary rounded-3xl flex items-center justify-center">
-                    <QrCode size={80} className="text-primary-foreground" />
-                  </div>
-                  <p className="text-sm font-semibold">SE ALLMÄNNA VILLKOR</p>
-                </div>
-              </Card>
-            </div> */}
           </div>
         </div>
       </section>
-
-      {/* Partners */}
-      {/* <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Våra partners</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {partners.map((partner) => (
-              <Card key={partner.name} className="overflow-hidden group cursor-pointer">
-                <div className="relative h-64 bg-cover bg-center" style={{ backgroundImage: `url(${partner.image})` }}>
-                  <div className="absolute inset-0 bg-primary/30 group-hover:bg-primary/50 transition-colors flex items-center justify-center">
-                    <h3 className="text-2xl font-bold text-primary-foreground">{partner.name}</h3>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section> */}
 
       {/* Become Partner CTA */}
       <section className="bg-primary">
@@ -185,11 +159,20 @@ const Home = () => {
       <section className="py-16 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${pictureWood})` }}>
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <Card className="p-8 bg-card">
-              <h2 className="text-2xl font-bold mb-4">Välkommen till oss!</h2>
-              <p className="text-muted-foreground">
-                Har du köpt en begagnatgaranti via MobilityPartner? Då har du redan tagit ett smart steg mot ett tryggare bilägande. Här kan du läsa mer om Mobilitypartner, vad din garanti omfattar och hur du enkelt går tillväga om något skulle inträffa din bil. Vårt mål är att du ska känna dig trygg och nöjd.
-              </p>
+            <div className="p-8 bg-card rounded-lg">
+              <EditableText
+                fieldKey="page.home.welcome.title"
+                defaultValue="Välkommen till oss!"
+                tag="h2"
+                multiline={false}
+                className="text-2xl font-bold mb-4"
+              />
+              <EditableText
+                fieldKey="page.home.welcome.body"
+                defaultValue="Har du köpt en begagnatgaranti via MobilityPartner? Då har du redan tagit ett smart steg mot ett tryggare bilägande. Här kan du läsa mer om Mobilitypartner, vad din garanti omfattar och hur du enkelt går tillväga om något skulle inträffa din bil. Vårt mål är att du ska känna dig trygg och nöjd."
+                tag="p"
+                className="text-muted-foreground"
+              />
               <div className="flex flex-col sm:flex-row gap-8 mt-5">
                 {/* For Businesses */}
                 <div className="space-y-3">
@@ -201,7 +184,6 @@ const Home = () => {
                     >
                       <Link to="/Skadeanmalan">SKADEANMÄLAN</Link>
                     </Button>
-
                   </div>
                 </div>
                 {/* For Job Seekers */}
@@ -209,15 +191,13 @@ const Home = () => {
                   <Button
                     size="lg"
                     variant="outline"
-
                     className="bg-[#d2cbb8] text-slate-900 hover:bg-primary font-semibold px-8 rounded-full"
                   >
                     <Link to="/om-oss">OM OSS</Link>
-
                   </Button>
                 </div>
               </div>
-            </Card>
+            </div>
             <div
               className="h-80 bg-cover bg-center rounded-lg"
               style={{ backgroundImage: `url(${pictureCar})` }}
@@ -226,12 +206,12 @@ const Home = () => {
         </div>
       </section>
 
-
       <GjensidigeHero
         backgroundImage={ocean}
         logoImage={carfix}
-        title="För ett tryggare bilägande"
-        description="På Mobilitypartner gör vi det enklare och tryggare att köpa begagnad bil. Tillsammans med etablerade partners erbjuder vi garantilösningar som skyddar mot oväntade kostnader och ger extra trygghet efter köpet. Med enkel administration, tydliga villkor och produkter framtagna med kunden i fokus hjälper vi både bilhandlare och bilköpare till en smidigare och tryggare bilaffär."
+        title={pageContent["page.home.gjensidige.title"] ?? "För ett tryggare bilägande"}
+        description={pageContent["page.home.gjensidige.desc"] ?? "På Mobilitypartner gör vi det enklare och tryggare att köpa begagnad bil. Tillsammans med etablerade partners erbjuder vi garantilösningar som skyddar mot oväntade kostnader och ger extra trygghet efter köpet. Med enkel administration, tydliga villkor och produkter framtagna med kunden i fokus hjälper vi både bilhandlare och bilköpare till en smidigare och tryggare bilaffär."}
+        editKeys={{ title: "page.home.gjensidige.title", description: "page.home.gjensidige.desc" }}
       />
 
       <Footer />

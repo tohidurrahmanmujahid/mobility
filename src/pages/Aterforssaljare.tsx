@@ -11,6 +11,7 @@ import heroOcean from "@/assets/pictureocean.jpg";
 import carGarage from "@/assets/picutrecars.jpg";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import EditableText from "@/components/EditableText";
 
 const Aterforssaljare = () => {
   const [formData, setFormData] = useState({
@@ -98,14 +99,28 @@ const Aterforssaljare = () => {
       {/* Contact Process */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Kontakta oss</h2>
+          <EditableText
+            fieldKey="page.partner.contact.title"
+            defaultValue="Kontakta oss"
+            tag="h2"
+            multiline={false}
+            className="text-3xl font-bold text-center mb-12"
+          />
 
           <div className="max-w-3xl mx-auto mb-12">
-            <h3 className="text-2xl font-bold mb-6">Så blir du en av oss</h3>
-            <p className="text-muted-foreground mb-8">
-              Vill du bli en del av vårt nätverk och erbjuda dina kunder trygghet?
-              Så här enkelt är det:
-            </p>
+            <EditableText
+              fieldKey="page.partner.howto.title"
+              defaultValue="Så blir du en av oss"
+              tag="h3"
+              multiline={false}
+              className="text-2xl font-bold mb-6"
+            />
+            <EditableText
+              fieldKey="page.partner.howto.description"
+              defaultValue="Vill du bli en del av vårt nätverk och erbjuda dina kunder trygghet? Så här enkelt är det:"
+              tag="p"
+              className="text-muted-foreground mb-8"
+            />
 
             <Card className="p-8 bg-card mb-8">
               <div className="space-y-6">
@@ -114,10 +129,20 @@ const Aterforssaljare = () => {
                     <Check className="text-primary-foreground" size={20} />
                   </div>
                   <div>
-                    <h4 className="font-bold mb-2">Kontakta oss</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Ring eller fyll i formuläret nedan så hör vi av oss.
-                    </p>
+                    <EditableText
+                      fieldKey="page.partner.step1.title"
+                      defaultValue="Kontakta oss"
+                      tag="h4"
+                      multiline={false}
+                      className="font-bold mb-2"
+                    />
+                    <EditableText
+                      fieldKey="page.partner.step1.description"
+                      defaultValue="Ring eller fyll i formuläret nedan så hör vi av oss."
+                      tag="p"
+                      multiline={false}
+                      className="text-sm text-muted-foreground"
+                    />
                   </div>
                 </div>
 
@@ -126,10 +151,20 @@ const Aterforssaljare = () => {
                     <Check className="text-primary-foreground" size={20} />
                   </div>
                   <div>
-                    <h4 className="font-bold mb-2">Vi kontaktar dig</h4>
-                    <p className="text-sm text-muted-foreground">
-                      För genomgång av vilka produkter som passar ert företag.
-                    </p>
+                    <EditableText
+                      fieldKey="page.partner.step2.title"
+                      defaultValue="Vi kontaktar dig"
+                      tag="h4"
+                      multiline={false}
+                      className="font-bold mb-2"
+                    />
+                    <EditableText
+                      fieldKey="page.partner.step2.description"
+                      defaultValue="För genomgång av vilka produkter som passar ert företag."
+                      tag="p"
+                      multiline={false}
+                      className="text-sm text-muted-foreground"
+                    />
                   </div>
                 </div>
 
@@ -138,18 +173,32 @@ const Aterforssaljare = () => {
                     <Check className="text-primary-foreground" size={20} />
                   </div>
                   <div>
-                    <h4 className="font-bold mb-2">Du är snabbt igång</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Vi finns alltid här för dig, när du behöver hjälp eller har frågor.
-                      Du erbjuds även kostnadsfri utbildning samt kontinuerlig support med personlig kontakt.
-                    </p>
+                    <EditableText
+                      fieldKey="page.partner.step3.title"
+                      defaultValue="Du är snabbt igång"
+                      tag="h4"
+                      multiline={false}
+                      className="font-bold mb-2"
+                    />
+                    <EditableText
+                      fieldKey="page.partner.step3.description"
+                      defaultValue="Vi finns alltid här för dig, när du behöver hjälp eller har frågor. Du erbjuds även kostnadsfri utbildning samt kontinuerlig support med personlig kontakt."
+                      tag="p"
+                      className="text-sm text-muted-foreground"
+                    />
                   </div>
                 </div>
               </div>
             </Card>
 
             <div className="text-center p-8 bg-secondary rounded-lg">
-              <p className="text-2xl font-bold mb-2">010 - 189 89 99</p>
+              <EditableText
+                fieldKey="page.partner.phone"
+                defaultValue="010 - 189 89 99"
+                tag="p"
+                multiline={false}
+                className="text-2xl font-bold mb-2"
+              />
             </div>
           </div>
         </div>
